@@ -18,15 +18,11 @@ export type ClearanceChecklistTemplateDocument = ClearanceChecklistTemplate & Do
 @Schema({ timestamps: true })
 export class ClearanceChecklistTemplate {
   @Prop({ required: true })
-  /* why: Human-friendly template name (e.g., "Default Offboarding - Full Time").
-     type justification: string is sufficient.
-     service note: Used in UIs to select template when creating ClearanceInstance. */
+  /* why: Human-friendly template name (e.g., "Default Offboarding - Full Time"). */
   name!: string;
 
   @Prop({ required: false })
-  /* why: Optional description for template details and HR notes.
-     type justification: string.
-     service note: UI displays to help administrators choose templates. */
+  /* why: Optional description for template details and HR notes. */
   description?: string;
 
   @Prop({
@@ -42,9 +38,7 @@ export class ClearanceChecklistTemplate {
     ],
     default: [],
   })
-  /* why: Defines the checklist items (OFF-006, BR 13a).
-     type justification: Embedding items in template simplifies template management and prevents need for extra collection per item.
-     service note: On creation of ClearanceInstance the template items are copied (snapshot) to the instance to preserve historical accuracy. */
+  /* why: Defines the checklist items (OFF-006, BR 13a). */
   items!: {
     code: string;
     title: string;
@@ -58,15 +52,11 @@ export class ClearanceChecklistTemplate {
     ref: 'User',
     required: true,
   })
-  /* why: Template author for accountability (auditability).
-     type justification: ObjectId reference to User who created/owns template.
-     service note: Permissions checks for editing/deleting templates. */
+  /* why: Template author for accountability (auditability). */
   createdBy!: Types.ObjectId;
 
   @Prop({ type: Boolean, default: true })
-  /* why: Templates may be deactivated but kept historically (Phase requirement).
-     type justification: boolean for quick filtering in admin UIs.
-     service note: When creating ClearanceInstance, only active templates are available by default. */
+  /* why: Templates may be deactivated but kept historically (Phase requirement). */
   isActive!: boolean;
 }
 

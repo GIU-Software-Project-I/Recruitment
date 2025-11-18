@@ -24,51 +24,35 @@ export enum DepartmentSignoffStatus {
 @Schema({ timestamps: true })
 export class ClearanceDepartmentSignoff {
   @Prop({ type: Types.ObjectId, ref: 'ClearanceInstance', required: true })
-  /* why: Link to the ClearanceInstance for audit and traceability (OFF-010).
-     type justification: ObjectId reference allows joins and aggregate queries.
-     service note: Query signoffs by clearanceInstanceId to reconstruct the clearance timeline. */
+   /* why: Link to the ClearanceInstance for audit and traceability (OFF-010). */
    clearanceInstanceId!: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
-  /* why: Employee link for departmental dashboards (who is being cleared).
-     type justification: ObjectId reference.
-     service note: Useful for department views to show pending signoffs for employees. */
+   /* why: Employee link for departmental dashboards (who is being cleared). */
    employeeId!: Types.ObjectId;
 
   @Prop({ required: true })
-  /* why: Department name (IT, Finance, Facilities, LineManager).
-     type justification: string for simple queries.
-     service note: Indexable for quick filtering (e.g., find all IT pending signoffs). */
+   /* why: Department name (IT, Finance, Facilities, LineManager). */
    department!: string;
 
   @Prop({ enum: DepartmentSignoffStatus, default: DepartmentSignoffStatus.PENDING })
-  /* why: Current state of sign-off (OFF-010).
-     type justification: enum simplifies state handling.
-     service note: Controllers will update this field and can notify HR upon approval. */
+   /* why: Current state of sign-off (OFF-010). */
    signoffStatus!: DepartmentSignoffStatus;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: false })
-  /* why: Person who approved or rejected.
-     type justification: ObjectId reference.
-     service note: Display signer info in audits. */
+  /* why: Person who approved or rejected. */
   signedBy?: Types.ObjectId;
 
   @Prop({ type: Date, required: false })
-  /* why: Timestamp of sign-off action.
-     type justification: Date.
-     service note: Useful to compute time-to-clear metrics. */
+  /* why: Timestamp of sign-off action. */
   signedAt?: Date;
 
   @Prop({ type: String, required: false })
-  /* why: Optional comment from department during sign-off.
-     type justification: string.
-     service note: Useful for exception handling and follow-up. */
+  /* why: Optional comment from department during sign-off. */
   comment?: string;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  /* why: The user who created this signoff record (usually system/HR when instance created).
-     type justification: ObjectId ref.
-     service note: For accountability. */
+   /* why: The user who created this signoff record (usually system/HR when instance created). */
    createdBy!: Types.ObjectId;
 }
 

@@ -25,33 +25,26 @@ export enum SettlementStatus {
 @Schema({ timestamps: true })
 export class FinalSettlement {
   @Prop({ type: Types.ObjectId, ref: 'OffboardingRequest', required: true })
-  /* why: Link to the initiating request to maintain full traceability (OFF-013).
-     type justification: ObjectId reference.
-     service note: Payroll services will find settlements by offboardingRequestId. */
+  //Link to the initiating request to maintain full traceability (OFF-013).
+
     offboardingRequestId!: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
-  /* why: Employee identification (for payroll, benefits termination).
-     type justification: ObjectId reference.
-     service note: Populate to get salary/bank data. */
+  // Employee identification (for payroll, benefits termination)
+     
    employeeId!: Types.ObjectId;
 
   @Prop({ type: Number, required: true })
-  /* why: Gross final payouts (sum before deductions).
-     type justification: Number for currency amounts (monetary fields should be stored as smallest unit or decimal depending on system; here Number is used — if precision needed, use Decimal128).
-     service note: Use consistent currency conventions across system. */
+  // Gross final payouts (sum before deductions).
    grossAmount!: number;
 
   @Prop({ type: Number, required: true })
-  /* why: Sum of deductions applicable (loans, penalties).
-     type justification: Number.
-     service note: Calculated by services; kept for audit. */
-   totalDeductions!: number;
+  // why: Sum of deductions applicable (loans, penalties).
+  totalDeductions!: number;
 
   @Prop({ type: Number, required: true })
-  /* why: Net payable amount after deductions (used by Payroll integration).
-     type justification: Number.
-     service note: Primary value consumed by payroll execution. */
+  //why: Net payable amount after deductions (used by Payroll integration).
+ 
    netPayable!: number;
 
   @Prop({
@@ -64,9 +57,7 @@ export class FinalSettlement {
     ],
     default: [],
   })
-  /* why: Breakdown of settlement line-items (BR 9: unused leave encashment, loans, severance).
-     type justification: Embedded array for snapshot and audit.
-     service note: Used to generate detailed settlement lines for payslip. */
+  /* why: Breakdown of settlement line-items (BR 9: unused leave encashment, loans, severance). */
    breakdown!: {
     code: string;
     description?: string;
@@ -78,39 +69,27 @@ export class FinalSettlement {
     ref: 'User',
     required: true,
   })
-  /* why: HR actor who prepared the settlement.
-     type justification: ObjectId ref for accountability.
-     service note: Displayed in approvals and audit exports. */
+  /* why: HR actor who prepared the settlement. */
    preparedBy!: Types.ObjectId;
 
   @Prop({ enum: SettlementStatus, default: SettlementStatus.DRAFT })
-  /* why: Status of settlement lifecycle (preparation -> approval -> processed).
-     type justification: enum for step handling in controllers.
-     service note: Payroll triggers only when status is APPROVED. */
+  /* why: Status of settlement lifecycle (preparation -> approval -> processed). */
    status!: SettlementStatus;
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  /* why: Approver (Finance / HR) who signed off on settlement.
-     type justification: ObjectId ref.
-     service note: Required before marking settlement for payroll. */
+  /* why: Approver (Finance / HR) who signed off on settlement. */
   approvedBy?: Types.ObjectId;
 
   @Prop({ type: Date })
-  /* why: Timestamp of approval.
-     type justification: Date.
-     service note: Helpful to decide payroll period eligibility. */
+  /* why: Timestamp of approval. */
   approvedAt?: Date;
 
   @Prop({ type: String, required: false })
-  /* why: Notes about settlement calculations, rounding rules or exceptions.
-     type justification: string.
-     service note: Included in exports to Payroll Module. */
+  /* why: Notes about settlement calculations, rounding rules or exceptions. */
   notes?: string;
 
   @Prop({ type: Boolean, default: false })
-  /* why: Indicates whether benefits termination notification has been sent (OFF-013).
-     type justification: boolean.
-     service note: Ensures idempotency of notifications to benefits subsystem. */
+  /* why: Indicates whether benefits termination notification has been sent (OFF-013). */
    benefitsNotified!: boolean;
 }
 

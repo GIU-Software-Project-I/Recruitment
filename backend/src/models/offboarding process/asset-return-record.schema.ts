@@ -9,9 +9,6 @@ export class AssetReturnRecord {
   @Prop({ type: Types.ObjectId, ref: 'Employee', required: true })
   employeeId!: Types.ObjectId;  
 
-  @Prop({ required: true })
-
-
   @Prop()
   title?: string;
 

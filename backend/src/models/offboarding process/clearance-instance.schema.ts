@@ -30,9 +30,7 @@ export class ClearanceInstance {
     ref: 'OffboardingRequest',
     required: true,
   })
-  /* why: Links the clearance to the initiating offboarding request (Step 1 -> Step 4).
-     type justification: ObjectId reference allows joining request and clearance easily.
-     service note: When request status changes, controllers find related clearance by this id. */
+  /* why: Links the clearance to the initiating offboarding request (Step 1 -> Step 4). */
   offboardingRequestId!: Types.ObjectId;
 
   @Prop({
@@ -40,9 +38,7 @@ export class ClearanceInstance {
     ref: 'Employee',
     required: true,
   })
-  /* why: Quick link to employee profile for clearance operations (Input: Employee Profile).
-     type justification: ObjectId ref avoids duplication.
-     service note: Frequently populated in clearance UIs and for departmental views. */
+  /* why: Quick link to employee profile for clearance operations (Input: Employee Profile). */
   employeeId!: Types.ObjectId;
 
   @Prop({
@@ -50,9 +46,7 @@ export class ClearanceInstance {
     ref: 'ClearanceChecklistTemplate',
     required: true,
   })
-  /* why: Original template reference used to create this instance (traceability).
-     type justification: ObjectId reference for traceability.
-     service note: Preserve the template id while copying items to snapshot to track which template was used. */
+  /* why: Original template reference used to create this instance (traceability). */
   templateId!: Types.ObjectId;
 
   @Prop({
@@ -72,9 +66,7 @@ export class ClearanceInstance {
     ],
     default: [],
   })
-  /* why: Snapshot of checklist items at time of clearance creation (OFF-006).
-     type justification: Embedded sub-documents offer fast read/writes and simpler transactions for per-employee clearance.
-     service note: Services will update item status as departments confirm returns/signoffs. assetReturnId links to individual asset returns. */
+  /* why: Snapshot of checklist items at time of clearance creation (OFF-006). */
   items!: {
     itemCode: string;
     title: string;
@@ -99,9 +91,7 @@ export class ClearanceInstance {
     ],
     default: [],
   })
-  /* why: Multi-department sign-offs (OFF-010) must be tracked (BR 13b,c).
-     type justification: Embedded array ensures the clearance instance contains its sign-offs for audit.
-     service note: For heavy-volume writes / cross-dept queries you may prefer separate ClearanceDepartmentSignoff documents (see next schema). */
+  /* why: Multi-department sign-offs (OFF-010) must be tracked (BR 13b,c). */
   departmentSignoffs!: {
     department: string;
     signoffStatus?: 'pending' | 'approved' | 'rejected';
@@ -114,18 +104,14 @@ export class ClearanceInstance {
     enum: ClearanceStatus,
     default: ClearanceStatus.IN_PROGRESS,
   })
-  /* why: Overall clearance lifecycle (OFF-010 governs final payroll release).
-     type justification: enum for simple queries and state machine handling.
-     service note: Services set to FULLY_CLEARED to allow payroll finalization. */
+  /* why: Overall clearance lifecycle (OFF-010 governs final payroll release). */
   status!: ClearanceStatus;
 
   @Prop({
     type: Types.ObjectId,
     ref: 'User',
   })
-  /* why: HR manager or owner responsible for this clearance instance.
-     type justification: ObjectId reference to a User.
-     service note: Permission checks and notifications reference this field. */
+  /* why: HR manager or owner responsible for this clearance instance. */
   ownerId?: Types.ObjectId;
 
   @Prop({
@@ -139,9 +125,7 @@ export class ClearanceInstance {
     ],
     default: [],
   })
-  /* why: Audit trail for the clearance instance changes (BR 17).
-     type justification: Embedded subdocs keep the history with the instance.
-     service note: Useful to show clearance timeline to employee or auditors. */
+  /* why: Audit trail for the clearance instance changes (BR 17). */
   auditTrail!: {
     actorId?: Types.ObjectId;
     action?: string;
@@ -150,9 +134,7 @@ export class ClearanceInstance {
   }[];
 
   @Prop({ type: Date })
-  /* why: Optional timestamp when the clearance became fully cleared (used to trigger payroll release).
-     type justification: Date type for precise coordination with payroll period.
-     service note: Controllers check this before creating FinalSettlement. */
+  /* why: Optional timestamp when the clearance became fully cleared (used to trigger payroll release). */
   clearedAt?: Date;
 }
 

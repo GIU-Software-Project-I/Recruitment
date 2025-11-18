@@ -11,7 +11,8 @@ export enum ApplicationStatus {
   INTERVIEW = 'interview',
   OFFER = 'offer',
   HIRED = 'hired',
-  REJECTED = 'rejected'
+  REJECTED = 'rejected',
+WITHDRAWN = 'Withdrawn'
 }
 
 @Schema({ timestamps: true })
@@ -46,7 +47,7 @@ export class Application {
 
   // rec008/rec009: history of status changes for audit and timeline
   @Prop([{ status: String, changedBy: Types.ObjectId, at: Date, note: String }])
-  statusHistory?: { status: string; changedBy?: Types.ObjectId; at: Date; note?: string }[];
+  statusHistory?: { status: string; changedBy?: Types.ObjectId; at: Date; note?: string }[]; // ADD MANAGER OR HR REFERENCE FOR CHANGED BY
 
   // rec030: referral tagging
   @Prop({ default: false })
@@ -74,7 +75,7 @@ export class Application {
 
   // rec017 / rec022: communication logs (status updates, rejection notices, templates used)
   @Prop([{ type: String, message: String, sentBy: Types.ObjectId, at: Date, channel: String }])
-  communicationLogs?: { type?: string; message?: string; sentBy?: Types.ObjectId; at?: Date; channel?: string }[];
+  communicationLogs?: { type?: string; message?: string; sentBy?: Types.ObjectId; at?: Date; channel?: string }[];// REFERNCE HR OR MANAGER OR THE PERSON WHO PUT THE POSITION UP FOR HIRE
 
   // rec004 / rec008: progress percentage calculated from template stages
   @Prop({ default: 0 })

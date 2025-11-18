@@ -54,7 +54,7 @@ export class Application {
 
   // rec030: referral source details (e.g., employee id or campaign)
   @Prop({ default: null })
-  referralSource?: string;
+  referralSource?: string; // REFERENCE TO AN EMPLOYEE OR USER
 
   // rec028: candidate consent for data processing/background checks
   @Prop({ default: false })

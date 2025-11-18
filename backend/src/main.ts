@@ -21,7 +21,7 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .setTitle('HR System API')
-        .setDescription('API documentation — limited to safe public models (no secrets).')
+        .setDescription('API documentation — limited to safe public modules (no secrets).')
         .setVersion('1.0')
         .addBearerAuth({type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header',}, 'access-token',).build();
 

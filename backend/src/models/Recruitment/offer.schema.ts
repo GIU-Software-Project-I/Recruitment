@@ -1,7 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import {Document, HydratedDocument, Types} from 'mongoose';
 
-export type OfferDocument = Offer & Document;
+export type OfferDocument = HydratedDocument<Offer>;
+
+export enum OfferStatus {
+    PENDING = 'pending',
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+    WITHDRAWN = 'withdrawn',
+}
 
 @Schema({ timestamps: true })
 export class Offer {
@@ -22,8 +29,8 @@ export class Offer {
   startDate?: Date;
 
   // rec014: offer status (pending/accepted/rejected/withdrawn)
-  @Prop({ default: 'pending' })
-  status?: 'pending' | 'accepted' | 'rejected' | 'withdrawn';
+  @Prop({ default: OfferStatus.PENDING,enum: Object.values(OfferStatus) })
+  status?: OfferStatus;
 
   // rec014/rec018: textual terms or template reference
   @Prop({ default: '' })

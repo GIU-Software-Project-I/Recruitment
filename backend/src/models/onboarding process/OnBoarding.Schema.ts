@@ -4,6 +4,21 @@ import {type} from "node:os";
 
 export type OnboardingProcessDocument = HydratedDocument<OnboardingProcess>;
 
+
+export enum TaskStatus{
+    PENDING='pending',
+    IN_PROGRESS='in_progress',
+    COMPLETED='completed',
+    FAILED='failed',
+}
+
+export enum OnboardingStatus{
+    PENDING='pending',
+    IN_PROGRESS='in_progress',
+    COMPLETED='completed',
+    CANCELLED='cancelled',
+}
+
 @Schema({ timestamps: true })
 export class OnboardingProcess {
     @Prop({ type: Types.ObjectId, ref: 'Employee', required: false })
@@ -11,9 +26,9 @@ export class OnboardingProcess {
     // Why: ONB-002 - Link to employee profile once created
     // Justification: Reference to Employee schema (to be created in Employee Profile module)
     // Optional initially as employee profile might be created later in the process
-    //
-    // @Prop({ type: Types.ObjectId, ref: 'RecruitmentOffer', required: true })
-    // offer: Types.ObjectId; // Reference to accepted offer - ONB-002, BR 17(a,b)
+
+    @Prop({ type: Types.ObjectId, ref: 'RecruitmentOffer', required: true })
+    offer!: Types.ObjectId; // Reference to accepted offer - ONB-002, BR 17(a,b)
 
     @Prop({ required: true })
     candidateName!: string;
@@ -35,40 +50,23 @@ export class OnboardingProcess {
     // Why: ONB-013, ONB-018 - Automated provisioning and payroll initiation timing
     // Justification: Critical for scheduling tasks and system access activation
 
-    @Prop({type: String, enum: ['pending', 'in_progress', 'completed', 'cancelled'], default: 'pending'})
+    @Prop({type: String, enum: Object.values(OnboardingStatus), default: OnboardingStatus.PENDING})
     status?: string;
     // Why: ONB-004 - Track progress in onboarding tracker
     // Justification: Essential for monitoring overall process status
 
-    @Prop({ type: [{taskId: { type: String, required: true }, // Reference to checklist task
-            title: { type: String, required: true },
-            status: {
-                type: String,
-                enum: ['pending', 'in_progress', 'completed', 'failed'],
-                default: 'pending'
-            },
-            assignedTo: { type: String, required: true },
-            dueDate: { type: Date, required: true },
-            completedAt: { type: Date },
-            notes: { type: String }
-        }]})
-    tasks?: Array<{
-        taskId: string;
-        title: string;
-        status: string;
-        assignedTo: string;
-        dueDate: Date;
-        completedAt?: Date;
-        notes?: string;
-    }>;
+
+@Prop({type:Types.ObjectId, ref: 'OnboardingTask', required: true})
+    tasks!: Types.ObjectId;
+
     // Why: ONB-004 - Individual task tracking in the onboarding tracker
     // Justification: Embedded sub-document for instance-specific task data
     // This denormalization supports efficient querying for the tracker without population
 
-    @Prop({ type: Types.ObjectId, ref: 'Contract' })
-    contractId!: Types.ObjectId;
-    // Why: ONB-002 - Access signed contract details for employee profile creation
-    // Justification: Reference to Contract schema (from Recruitment module)
+    // @Prop({ type: Types.ObjectId, ref: 'Contract' })
+    // contractId!: Types.ObjectId;
+    // // Why: ONB-002 - Access signed contract details for employee profile creation
+    // // Justification: Reference to Contract schema (from Recruitment module)
 
     @Prop({ default: Date.now })
     contractSignedDate?: Date;
@@ -83,27 +81,3 @@ export class OnboardingProcess {
 
 export const OnboardingProcessSchema = SchemaFactory.createForClass(OnboardingProcess);
 
-
-// @Prop()
-// contractSignedDate: Date; // Used for payroll initiation timing - ONB-018
-//
-// @Prop()
-// signingBonusAmount: number; // For bonus processing - ONB-019
-//
-// @Prop()
-// signingBonusProcessed: boolean; // Tracks if bonus was processed - ONB-019
-//
-// @Prop()
-// payrollInitiated: boolean; // Tracks payroll setup - ONB-018
-//
-// @Prop()
-// accessProvisioned: boolean; // Tracks system access - ONB-009, ONB-013
-//
-// @Prop()
-// resourcesReserved: boolean; // Tracks equipment/desk reservation - ONB-012
-//
-// @Prop()
-// documentsSubmitted: boolean; // Tracks document completion - ONB-007
-//
-// @Prop()
-// cancellationReason?: string; // For no-show cases - BR 20

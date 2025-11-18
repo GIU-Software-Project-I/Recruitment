@@ -66,7 +66,7 @@ export class Application {
   consentGivenAt?: Date;
 
   // rec028: consent details or version identifier
-  @Prop({ default: '' })
+  @Prop()
   consentDetails?: string;
 
   // rec007/rec009: application source (careers_page, linkedin, referral)
@@ -86,7 +86,7 @@ export class Application {
   assessmentScores?: { template?: Types.ObjectId; score?: number; notes?: string }[];
 
   // rec008/rec017: who last updated the application status or details
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
   lastUpdatedBy?: Types.ObjectId;
 }
 

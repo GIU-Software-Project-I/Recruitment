@@ -37,7 +37,7 @@ export class Offer {
   terms?: string;
 
   // rec014: user who issued the offer
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
   issuedBy?: Types.ObjectId; // SEE WHO IS RESPONSIBLE FOR THESE
 
   // rec014: audit trail of actions on the offer

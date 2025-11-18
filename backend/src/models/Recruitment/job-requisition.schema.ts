@@ -55,11 +55,11 @@ export class JobRequisition {
 
 
   // rec003: user who created the requisition
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
   createdBy?: Types.ObjectId;
 
   // rec023: who posted the job
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
   postedBy?: Types.ObjectId; // HR OR MANAGER
 
   // rec023: external career sites URLs where the job was posted

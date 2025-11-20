@@ -1,7 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import {Document, HydratedDocument, Types} from 'mongoose';
 
-export type OfferDocument = Offer & Document;
+export type OfferDocument = HydratedDocument<Offer>;
+
+export enum OfferStatus {
+    PENDING = 'pending',
+    ACCEPTED = 'accepted',
+    REJECTED = 'rejected',
+    WITHDRAWN = 'withdrawn',
+}
 
 @Schema({ timestamps: true })
 export class Offer {
@@ -15,23 +22,23 @@ export class Offer {
 
   // rec014: currency for salary
   @Prop()
-  currency?: string;
+  currency?: string; // LINK TO PAYROLL
 
   // rec014: proposed start date
   @Prop()
   startDate?: Date;
 
   // rec014: offer status (pending/accepted/rejected/withdrawn)
-  @Prop({ default: 'pending' })
-  status?: 'pending' | 'accepted' | 'rejected' | 'withdrawn';
+  @Prop({ default: OfferStatus.PENDING,enum: Object.values(OfferStatus) })
+  status?: OfferStatus;
 
   // rec014/rec018: textual terms or template reference
   @Prop({ default: '' })
   terms?: string;
 
   // rec014: user who issued the offer
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  issuedBy?: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
+  issuedBy?: Types.ObjectId; // SEE WHO IS RESPONSIBLE FOR THESE
 
   // rec014: audit trail of actions on the offer
   @Prop([{ action: String, by: Types.ObjectId, at: Date, note: String }])
@@ -56,6 +63,9 @@ export class Offer {
   // rec029: optional list of pre-boarding tasks created on handoff
   @Prop([String])
   preboardingTasks?: string[];
+
+  @Prop()
+  expiresAt?: Date;
 }
 
 export const OfferSchema = SchemaFactory.createForClass(Offer);

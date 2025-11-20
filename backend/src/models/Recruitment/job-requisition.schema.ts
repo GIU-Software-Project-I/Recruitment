@@ -18,6 +18,9 @@ export class JobRequisition {
   @Prop({ type: Types.ObjectId, ref: 'Department', required: true })
   department!: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'Position', required: true })
+  position!: Types.ObjectId;
+
   // rec003: job location
   @Prop()
   location?: string;
@@ -50,9 +53,14 @@ export class JobRequisition {
   @Prop()
   publishedAt?: Date;
 
+
+  // rec003: user who created the requisition
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
+  createdBy?: Types.ObjectId;
+
   // rec023: who posted the job
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  postedBy?: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'HR' })
+  postedBy?: Types.ObjectId; // HR OR MANAGER
 
   // rec023: external career sites URLs where the job was posted
   @Prop([String])
@@ -61,10 +69,6 @@ export class JobRequisition {
   // rec003: requisition lifecycle status
   @Prop({ enum: Object.values(JobRequisitionStatus), default: JobRequisitionStatus.DRAFT })
   status!: JobRequisitionStatus;
-
-  // rec003: user who created the requisition
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  createdBy?: Types.ObjectId;
 
   // rec004: hiring process template used for candidate tracking & progress
   @Prop({ type: Types.ObjectId, ref: 'HiringProcessTemplate' })

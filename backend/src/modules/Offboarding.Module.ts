@@ -1,11 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AssetReturnRecordSchema } from '../models/offboarding/asset-return-record.schema';
-import { ClearanceChecklistTemplateSchema } from '../models/offboarding/clearance-checklist-template';
-import { ClearanceDepartmentSignoffSchema } from '../models/offboarding/clearance-department-signoff.schema';
-import { ClearanceInstanceSchema } from '../models/offboarding/clearance-instance.schema';
-import { FinalSettlementSchema } from '../models/offboarding/final-settelment';
-import { OffboardingRequestSchema } from '../models/offboarding/offboarding-schema';
+
 import { AssetReturnRecordController } from '../controllers/offboarding/asset-return-record.controller';
 import { ClearanceChecklistTemplateController } from '../controllers/offboarding/clearance-checklist-template.controller';
 import { ClearanceDepartmentSignoffController } from '../controllers/offboarding/clearance-department-signoff.controller';
@@ -20,16 +15,16 @@ import { FinalSettlementService } from '../services/offboarding/final-settlement
 import { OffboardingService } from '../services/offboarding/offboarding.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: 'AssetReturnRecord', schema: AssetReturnRecordSchema },
-      { name: 'ClearanceChecklistTemplate', schema: ClearanceChecklistTemplateSchema },
-      { name: 'ClearanceDepartmentSignoff', schema: ClearanceDepartmentSignoffSchema },
-      { name: 'ClearanceInstance', schema: ClearanceInstanceSchema },
-      { name: 'FinalSettlement', schema: FinalSettlementSchema },
-      { name: 'OffboardingRequest', schema: OffboardingRequestSchema }
-    ])
-  ],
+  // imports: [
+  //   MongooseModule.forFeature([
+  //     { name: 'AssetReturnRecord', schema: AssetReturnRecordSchema },
+  //     { name: 'ClearanceChecklistTemplate', schema: ClearanceChecklistTemplateSchema },
+  //     { name: 'ClearanceDepartmentSignoff', schema: ClearanceDepartmentSignoffSchema },
+  //     { name: 'ClearanceInstance', schema: ClearanceInstanceSchema },
+  //     { name: 'FinalSettlement', schema: FinalSettlementSchema },
+  //     { name: 'OffboardingRequest', schema: OffboardingRequestSchema }
+  //   ])
+  // ],
   controllers: [
     AssetReturnRecordController,
     ClearanceChecklistTemplateController,

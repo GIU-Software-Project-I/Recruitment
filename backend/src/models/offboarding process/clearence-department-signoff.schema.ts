@@ -1,4 +1,4 @@
-// clearance-department-signoff.schema.ts
+// clearance-department-signoff.schema.tsww
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
@@ -6,7 +6,7 @@ import { Document, Types } from 'mongoose';
  * ClearanceDepartmentSignoff
  * - Optional separate collection to hold department sign-offs.
  * - US: OFF-010 (multi-department sign-offs).
- * - BR: BR 13(b,c)
+ * - BR: BR 13(b,c) w
  *
  * Notes:
  * - This schema is provided because high-volume scenarios or auditing requirements may make querying signoffs across many clearances more efficient if stored as a separate collection.

@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 /**
- * ClearanceInstance (EmployeeClearance)
+ * ClearanceInstance (EmployeeClearance) www
  * - Per-employee instance of a clearance workflow, created from a ClearanceChecklistTemplate.
  * - US: OFF-006 (offboarding checklist active), OFF-010 (multi-department exit sign-offs)
  * - BR: BR 13(b,c) (multi-department clearance required), BR 14 (final approval signature filed)

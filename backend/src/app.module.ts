@@ -3,9 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import {OnboardingModule} from "./modules/Onboarding.Module";
-import {RecruitmentModule} from "./modules/Recruitment.Module";
-import {OffboardingModule} from "./modules/Offboarding.Module";
+
 
 
 @Module({
@@ -19,9 +17,7 @@ import {OffboardingModule} from "./modules/Offboarding.Module";
             }),
             inject: [ConfigService],
         }),
-        RecruitmentModule,
-        OnboardingModule,
-        OffboardingModule
+
     ],
     // providers: [
     //     { provide: APP_GUARD, useClass: JwtAuthGuard },

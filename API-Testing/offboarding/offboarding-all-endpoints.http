@@ -1,0 +1,298 @@
+
+### OFF-001: Create termination review
+POST http://localhost:8000/offboarding/termination
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "initiator": "MANAGER",
+  "reason": "PERFORMANCE",
+  "terminationDate": "2025-02-15T00:00:00Z",
+  "contractId": "{{contractId}}",
+  "performanceDataId": "perf_12345",
+  "hrComments": "Multiple warnings on file, final review completed"
+}
+
+###
+### Create termination for termination due to warnings
+POST http://localhost:8000/offboarding/termination
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "initiator": "HR",
+  "reason": "MISCONDUCT",
+  "terminationDate": "2025-02-10T00:00:00Z",
+  "contractId": "{{contractId}}",
+  "hrComments": "Serious misconduct incident documented"
+}
+
+###
+### Get termination by ID
+GET http://localhost:8000/offboarding/termination/{{terminationId}}
+
+###
+### Get all terminations
+GET http://localhost:8000/offboarding/termination
+
+###
+### Get terminations by status (UNDER_REVIEW)
+GET http://localhost:8000/offboarding/termination?status=UNDER_REVIEW
+
+###
+### Get terminations by employee
+GET http://localhost:8000/offboarding/termination?employeeId={{employeeId}}
+
+###
+### Update termination status
+PATCH http://localhost:8000/offboarding/termination/{{terminationId}}/status
+Content-Type: application/json
+
+{
+  "status": "APPROVED",
+  "hrComments": "Approved by HR Director on 2025-01-15"
+}
+
+###
+### Get termination approval payload
+GET http://localhost:8000/offboarding/termination/{{terminationId}}/approval-payload
+
+### ============================================================================
+### SECTION 2: RESIGNATION ENDPOINTS (OFF-018, OFF-019)
+### ============================================================================
+
+###
+### OFF-018: Create resignation request
+POST http://localhost:8000/offboarding/resignation
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "reason": "CAREER_CHANGE",
+  "terminationDate": "2025-02-28T00:00:00Z",
+  "contractId": "{{contractId}}",
+  "employeeComments": "Seeking better opportunities in another industry"
+}
+
+###
+### Create resignation - Family reasons
+POST http://localhost:8000/offboarding/resignation
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "reason": "FAMILY",
+  "terminationDate": "2025-03-15T00:00:00Z",
+  "contractId": "{{contractId}}",
+  "employeeComments": "Relocating due to family circumstances"
+}
+
+###
+### OFF-019: Get resignation status
+GET http://localhost:8000/offboarding/resignation/{{employeeId}}/status
+
+###
+### Get all resignations
+GET http://localhost:8000/offboarding/resignation
+
+###
+### Get pending resignations
+GET http://localhost:8000/offboarding/resignation?status=PENDING
+
+### ============================================================================
+### SECTION 3: CLEARANCE ENDPOINTS (OFF-006, OFF-010)
+### ============================================================================
+
+###
+### OFF-006/OFF-010: Create clearance checklist
+POST http://localhost:8000/offboarding/clearance
+Content-Type: application/json
+
+{
+  "terminationId": "{{terminationId}}"
+}
+
+###
+### Get clearance by termination ID
+GET http://localhost:8000/offboarding/clearance/termination/{{terminationId}}
+
+###
+### Update clearance item - IT department approval
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/department
+Content-Type: application/json
+
+{
+  "department": "IT",
+  "status": "APPROVED",
+  "comments": "All system access revoked, laptop recovered and wiped",
+  "updatedBy": "{{systemAdminId}}"
+}
+
+###
+### Update clearance item - Finance department approval
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/department
+Content-Type: application/json
+
+{
+  "department": "Finance",
+  "status": "APPROVED",
+  "comments": "Final settlement processed, no outstanding payments",
+  "updatedBy": "hr_user_456"
+}
+
+###
+### Update clearance item - Facilities approval
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/department
+Content-Type: application/json
+
+{
+  "department": "Facilities",
+  "status": "APPROVED",
+  "comments": "Access card collected, desk cleaned and reassigned",
+  "updatedBy": "admin_user_789"
+}
+
+###
+### Update clearance item - HR approval
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/department
+Content-Type: application/json
+
+{
+  "department": "HR",
+  "status": "APPROVED",
+  "comments": "All documents filed, benefits terminated as of exit date",
+  "updatedBy": "hr_director_123"
+}
+
+###
+### Update clearance item - Admin approval
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/department
+Content-Type: application/json
+
+{
+  "department": "Admin",
+  "status": "APPROVED",
+  "comments": "All administrative tasks completed",
+  "updatedBy": "admin_user_999"
+}
+
+###
+### Add equipment to clearance
+POST http://localhost:8000/offboarding/clearance/{{clearanceId}}/equipment
+Content-Type: application/json
+
+{
+  "equipmentId": "{{equipmentId}}",
+  "name": "Dell XPS 13 Laptop"
+}
+
+###
+### Add another equipment
+POST http://localhost:8000/offboarding/clearance/{{clearanceId}}/equipment
+Content-Type: application/json
+
+{
+  "equipmentId": "66f123456789abcdef000023",
+  "name": "Company Phone"
+}
+
+###
+### Mark equipment as returned
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/equipment/{{equipmentId}}
+Content-Type: application/json
+
+{
+  "returned": true,
+  "condition": "Good - No damage"
+}
+
+###
+### Mark ID card as returned
+PATCH http://localhost:8000/offboarding/clearance/{{clearanceId}}/card
+Content-Type: application/json
+
+{
+  "cardReturned": true
+}
+
+###
+### Get clearance status payload (for Payroll integration)
+GET http://localhost:8000/offboarding/clearance/{{terminationId}}/status-payload
+
+### ============================================================================
+### SECTION 4: ACCESS REVOCATION ENDPOINTS (OFF-007)
+### ============================================================================
+
+###
+### OFF-007: Revoke all system access
+POST http://localhost:8000/offboarding/access/revoke
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "accessTypes": ["email", "vpn", "payroll", "internal_systems"],
+  "revokedBy": "{{systemAdminId}}"
+}
+
+###
+### Revoke email and VPN access only
+POST http://localhost:8000/offboarding/access/revoke
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "accessTypes": ["email", "vpn"],
+  "revokedBy": "{{systemAdminId}}"
+}
+
+###
+### Revoke Active Directory and email access
+POST http://localhost:8000/offboarding/access/revoke
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "accessTypes": ["active_directory", "email"],
+  "revokedBy": "{{systemAdminId}}"
+}
+
+###
+### Revoke payroll system access
+POST http://localhost:8000/offboarding/access/revoke
+Content-Type: application/json
+
+{
+  "employeeId": "{{employeeId}}",
+  "accessTypes": ["payroll"],
+  "revokedBy": "{{systemAdminId}}"
+}
+
+###
+### Get access revocation history
+GET http://localhost:8000/offboarding/access/history/employeeid
+
+### ============================================================================
+### SECTION 5: FINAL SETTLEMENT ENDPOINTS (OFF-013)
+### ============================================================================
+
+###
+### OFF-013: Trigger final settlement
+POST http://localhost:8000/offboarding/settlement/trigger
+Content-Type: application/json
+
+{
+  "terminationId": "",
+  "effectiveDate": "2025-02-15T00:00:00Z",
+  "unusedLeaveBalance": 12.5
+}
+
+###
+### Check if settlement can be triggered
+GET http://localhost:8000/offboarding/settlement/can-trigger/id
+
+###
+### Get settlement readiness status
+GET http://localhost:8000offboarding/settlement/readiness/id
+
+###
+

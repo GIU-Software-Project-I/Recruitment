@@ -3,4 +3,6 @@ export enum TerminationStatus {
   UNDER_REVIEW = 'under_review',
   APPROVED = 'approved',
   REJECTED = 'rejected',
+  CLEARED = 'cleared',
+  COMPLETED = 'completed',
 }

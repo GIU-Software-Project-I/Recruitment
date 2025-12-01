@@ -1,250 +1,139 @@
-import { Controller, Post, Get, Patch, Body, Param, Query, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Put, Body, Param } from '@nestjs/common';
 import { OffboardingService } from '../services/offboarding.service';
-
-// DTOs
-import { CreateTerminationDto } from '../dto/offboarding/create-termination.dto';
-import { UpdateTerminationStatusDto } from '../dto/offboarding/update-termination-status.dto';
-import { CreateResignationDto } from '../dto/offboarding/create-resignation.dto';
-import { ClearanceItemUpdateDto } from '../dto/offboarding/clearance-item-update.dto';
-import { AddEquipmentDto } from '../dto/offboarding/add-equipment.dto';
-import { MarkEquipmentReturnedDto } from '../dto/offboarding/mark-equipment-returned.dto';
-import { RevokeAccessDto } from '../dto/offboarding/revoke-access.dto';
-import { TriggerFinalSettlementDto } from '../dto/offboarding/trigger-final-settlement.dto';
-
-// Enums
-import { TerminationStatus } from '../enums/termination-status.enum';
-
-// ============================================================================
-// OFFBOARDING CONTROLLER - CONSOLIDATED
-// ============================================================================
-// All offboarding endpoints consolidated into a single controller with clear separation
-// by requirement (OFF-001, OFF-006, OFF-007, OFF-010, OFF-013, OFF-018, OFF-019)
-// ============================================================================
+import { Types } from 'mongoose';
+import {
+  SubmitResignationDto,
+  TrackResignationStatusDto,
+  InitiateTerminationDto,
+  CreateOffboardingChecklistDto,
+  CreateClearanceChecklistDto,
+  UpdateClearanceSignOffDto,
+  GetClearanceStatusDto,
+  RevokeSystemAccessDto,
+  TriggerFinalSettlementDto,
+  UpdateTerminationStatusDto,
+  UpdateEquipmentReturnDto,
+  UpdateAccessCardReturnDto,
+} from '../dto/offboarding.dto';
 
 @Controller('offboarding')
 export class OffboardingController {
   constructor(private readonly offboardingService: OffboardingService) {}
 
-  // ============================================================================
-  // SECTION 1: TERMINATION ENDPOINTS (OFF-001)
-  // ============================================================================
-  // OFF-001: HR Manager initiates termination reviews
-
-  /**
-   * Create termination review
-   * POST /offboarding/termination
-   */
-  @Post('termination')
-  async createTerminationReview(@Body() dto: CreateTerminationDto) {
-    return await this.offboardingService.createTerminationReview(dto);
+  // ============================================
+  // OFF-018: Employee Submits Resignation Request
+  // User Story: As Employee, I want to request resignation
+  // ============================================
+  @Post('resignation/submit')
+  async submitResignation(@Body() dto: SubmitResignationDto) {
+    return this.offboardingService.submitResignation(dto);
   }
 
-  /**
-   * Update termination status
-   * PATCH /offboarding/termination/:id/status
-   */
-  @Patch('termination/:id/status')
-  async updateTerminationStatus(
-    @Param('id') id: string,
-    @Body() dto: UpdateTerminationStatusDto,
-  ) {
-    return await this.offboardingService.updateTerminationStatus(id, dto);
+  // ============================================
+  // OFF-019: Track Resignation Request Status
+  // User Story: As Employee, I want to track my resignation status
+  // ============================================
+  @Get('resignation/track/:employeeId')
+  async trackResignationStatus(@Param('employeeId') employeeId: string) {
+    const dto: TrackResignationStatusDto = {
+      employeeId: new Types.ObjectId(employeeId),
+    };
+    return this.offboardingService.trackResignationStatus(dto);
   }
 
-  /**
-   * Get termination by ID
-   * GET /offboarding/termination/:id
-   */
-  @Get('termination/:id')
-  async getTerminationById(@Param('id') id: string) {
-    return await this.offboardingService.getTerminationById(id);
+  // ============================================
+  // OFF-001: HR Initiates Termination Review
+  // User Story: As HR Manager, I want to initiate termination based on performance
+  // ============================================
+  @Post('termination/initiate')
+  async initiateTermination(@Body() dto: InitiateTerminationDto) {
+    return this.offboardingService.initiateTermination(dto);
   }
 
-  /**
-   * Get all terminations with optional filters
-   * GET /offboarding/termination
-   * Query params: status, employeeId
-   */
-  @Get('termination')
-  async getAllTerminations(
-    @Query('status') status?: TerminationStatus,
-    @Query('employeeId') employeeId?: string,
-  ) {
-    return await this.offboardingService.getAllTerminations({ status, employeeId });
+  // ============================================
+  // OFF-006: Create Offboarding Checklist (Asset Recovery)
+  // User Story: As HR Manager, I want offboarding checklist
+  // ============================================
+  @Post('checklist/create')
+  async createOffboardingChecklist(@Body() dto: CreateOffboardingChecklistDto) {
+    return this.offboardingService.createOffboardingChecklist(dto);
   }
 
-  /**
-   * Get termination approval payload for workflow system
-   * GET /offboarding/termination/:id/approval-payload
-   */
-  @Get('termination/:id/approval-payload')
-  async getTerminationApprovalPayload(@Param('id') id: string) {
-    return await this.offboardingService.getTerminationApprovalPayload(id);
+  // ============================================
+  // OFF-010: Multi-Department Exit Clearance Sign-offs
+  // User Story: As HR Manager, I want multi-department clearance
+  // ============================================
+  @Post('clearance/create')
+  async createClearanceSignOffs(@Body() dto: CreateClearanceChecklistDto) {
+    return this.offboardingService.createClearanceSignOffs(dto);
   }
 
-  // ============================================================================
-  // SECTION 2: RESIGNATION ENDPOINTS (OFF-018, OFF-019)
-  // ============================================================================
-  // OFF-018: Employee requests resignation
-  // OFF-019: Employee tracks resignation status
-
-  /**
-   * Create resignation request
-   * POST /offboarding/resignation
-   */
-  @Post('resignation')
-  async createResignationRequest(@Body() dto: CreateResignationDto) {
-    return await this.offboardingService.createResignationRequest(dto);
+  @Put('clearance/update')
+  async updateClearanceSignOff(@Body() dto: UpdateClearanceSignOffDto) {
+    return this.offboardingService.updateClearanceSignOff(dto);
   }
 
-  /**
-   * Get resignation status for employee
-   * GET /offboarding/resignation/:employeeId/status
-   */
-  @Get('resignation/:employeeId/status')
-  async getResignationStatus(@Param('employeeId') employeeId: string) {
-    return await this.offboardingService.getResignationStatus(employeeId);
+  @Get('clearance/status/:terminationId')
+  async getClearanceStatus(@Param('terminationId') terminationId: string) {
+    const dto: GetClearanceStatusDto = {
+      terminationId: new Types.ObjectId(terminationId),
+    };
+    return this.offboardingService.getClearanceStatus(dto);
   }
 
-  /**
-   * Get all resignations with optional filters
-   * GET /offboarding/resignation
-   * Query params: status
-   */
-  @Get('resignation')
-  async getAllResignations(@Query('status') status?: TerminationStatus) {
-    return await this.offboardingService.getAllResignations({ status });
-  }
-
-  // ============================================================================
-  // SECTION 3: CLEARANCE ENDPOINTS (OFF-006, OFF-010)
-  // ============================================================================
-  // OFF-006: HR Manager uses offboarding checklist (assets, ID cards, equipment)
-  // OFF-010: HR Manager obtains multi-department exit clearance sign-offs
-
-  /**
-   * Create clearance checklist
-   * POST /offboarding/clearance
-   */
-  @Post('clearance')
-  async createClearanceChecklist(@Body() body: { terminationId: string }) {
-    return await this.offboardingService.createClearanceChecklist(body.terminationId);
-  }
-
-  /**
-   * Update clearance item (department sign-off)
-   * PATCH /offboarding/clearance/:id/department
-   */
-  @Patch('clearance/:id/department')
-  async updateClearanceItem(@Param('id') id: string, @Body() dto: ClearanceItemUpdateDto) {
-    return await this.offboardingService.updateClearanceItem(id, dto);
-  }
-
-  /**
-   * Get clearance by termination ID
-   * GET /offboarding/clearance/termination/:terminationId
-   */
-  @Get('clearance/termination/:terminationId')
-  async getClearanceByTerminationId(@Param('terminationId') terminationId: string) {
-    return await this.offboardingService.getClearanceByTerminationId(terminationId);
-  }
-
-  /**
-   * Add equipment to clearance checklist
-   * POST /offboarding/clearance/:id/equipment
-   */
-  @Post('clearance/:id/equipment')
-  async addEquipmentToChecklist(@Param('id') id: string, @Body() dto: AddEquipmentDto) {
-    return await this.offboardingService.addEquipmentToChecklist(id, dto);
-  }
-
-  /**
-   * Mark equipment as returned
-   * PATCH /offboarding/clearance/:id/equipment/:equipmentId
-   */
-  @Patch('clearance/:id/equipment/:equipmentId')
-  async markEquipmentReturned(
-    @Param('id') id: string,
-    @Param('equipmentId') equipmentId: string,
-    @Body() dto: MarkEquipmentReturnedDto,
-  ) {
-    return await this.offboardingService.markEquipmentReturned(id, equipmentId, dto);
-  }
-
-  /**
-   * Update ID card returned status
-   * PATCH /offboarding/clearance/:id/card
-   */
-  @Patch('clearance/:id/card')
-  async updateCardReturnedStatus(@Param('id') id: string, @Body() body: { cardReturned: boolean }) {
-    return await this.offboardingService.updateCardReturnedStatus(id, body.cardReturned);
-  }
-
-  /**
-   * Get clearance status payload for Payroll module integration
-   * GET /offboarding/clearance/:terminationId/status-payload
-   */
-  @Get('clearance/:terminationId/status-payload')
-  async getClearanceStatusPayload(@Param('terminationId') terminationId: string) {
-    return await this.offboardingService.getClearanceStatusPayload(terminationId);
-  }
-
-  // ============================================================================
-  // SECTION 4: ACCESS REVOCATION ENDPOINTS (OFF-007)
-  // ============================================================================
-  // OFF-007: System Admin revokes system and account access upon termination
-
-  /**
-   * Log access revocation
-   * POST /offboarding/access/revoke
-   */
+  // ============================================
+  // OFF-007: System & Account Access Revocation
+  // User Story: As System Admin, I want to revoke access
+  // ============================================
   @Post('access/revoke')
-  @HttpCode(HttpStatus.OK)
-  async revokeAccess(@Body() dto: RevokeAccessDto) {
-    return await this.offboardingService.logAccessRevocation(dto);
+  async revokeSystemAccess(@Body() dto: RevokeSystemAccessDto) {
+    return this.offboardingService.revokeSystemAccess(dto);
   }
 
-  /**
-   * Get access revocation history
-   * GET /offboarding/access/history/:employeeId
-   */
-  @Get('access/history/:employeeId')
-  async getAccessRevocationHistory(@Param('employeeId') employeeId: string) {
-    return await this.offboardingService.getAccessRevocationHistory(employeeId);
-  }
-
-  // ============================================================================
-  // SECTION 5: FINAL SETTLEMENT ENDPOINTS (OFF-013)
-  // ============================================================================
-  // OFF-013: HR Manager triggers final pay calculation and benefits termination
-
-  /**
-   * Trigger final settlement
-   * POST /offboarding/settlement/trigger
-   */
+  // ============================================
+  // OFF-013: Final Settlement & Benefits Termination
+  // User Story: As HR Manager, I want to trigger final settlement
+  // ============================================
   @Post('settlement/trigger')
-  @HttpCode(HttpStatus.OK)
   async triggerFinalSettlement(@Body() dto: TriggerFinalSettlementDto) {
-    return await this.offboardingService.triggerFinalSettlement(dto);
+    return this.offboardingService.triggerFinalSettlement(dto);
   }
 
-  /**
-   * Check if settlement can be triggered
-   * GET /offboarding/settlement/can-trigger/:terminationId
-   */
-  @Get('settlement/can-trigger/:terminationId')
-  async canTriggerSettlement(@Param('terminationId') terminationId: string) {
-    const canTrigger = await this.offboardingService.canTriggerSettlement(terminationId);
-    return { canTrigger };
+  // ============================================
+  // Update Termination Status
+  // ============================================
+  @Put('termination/status')
+  async updateTerminationStatus(@Body() dto: UpdateTerminationStatusDto) {
+    return this.offboardingService.updateTerminationStatus(dto);
   }
 
-  /**
-   * Get settlement readiness status
-   * GET /offboarding/settlement/readiness/:terminationId
-   */
-  @Get('settlement/readiness/:terminationId')
-  async getSettlementReadinessStatus(@Param('terminationId') terminationId: string) {
-    return await this.offboardingService.getSettlementReadinessStatus(terminationId);
+  // ============================================
+  // Equipment Return Tracking
+  // ============================================
+  @Put('equipment/return')
+  async updateEquipmentReturn(@Body() dto: UpdateEquipmentReturnDto) {
+    return this.offboardingService.updateEquipmentReturn(dto);
+  }
+
+  @Put('access-card/return')
+  async updateAccessCardReturn(@Body() dto: UpdateAccessCardReturnDto) {
+    return this.offboardingService.updateAccessCardReturn(dto);
+  }
+
+  // ============================================
+  // Get All Termination Requests (HR Dashboard)
+  // ============================================
+  @Get('terminations/all')
+  async getAllTerminationRequests() {
+    return this.offboardingService.getAllTerminationRequests();
+  }
+
+  // ============================================
+  // Get Termination Request by ID
+  // ============================================
+  @Get('termination/:terminationId')
+  async getTerminationRequestById(@Param('terminationId') terminationId: string) {
+    return this.offboardingService.getTerminationRequestById(new Types.ObjectId(terminationId));
   }
 }
 

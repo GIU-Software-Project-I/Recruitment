@@ -9,7 +9,7 @@ import { ClearanceChecklist, ClearanceChecklistSchema } from "../models/clearanc
 import { JobTemplate, JobTemplateSchema } from '../models/job-template.schema';
 import { JobRequisition, JobRequisitionSchema } from '../models/job-requisition.schema';
 import { Referral, ReferralSchema } from '../models/referral.schema';
-import { Interview, InterviewSchema } from '../models/intervies.schema';
+import { Interview, InterviewSchema } from '../models/interview.schema';
 import { Offer, OfferSchema } from "../models/offer.schema";
 import { Contract, ContractSchema } from "../models/contract.schema";
 import { Document, DocumentSchema } from "../models/document.schema";
@@ -17,14 +17,14 @@ import { Onboarding, OnboardingSchema } from "../models/onboarding.schema";
 import { TerminationRequest, TerminationRequestSchema } from "../models/termination-request.schema";
 
 // Controllers
-import { RecruitmentController } from "../controllers/Recruitment/recruitment.controller";
-import { OnboardingController } from "../controllers/onboarding.controller";
-import { OffboardingController } from "../controllers/offboarding.controller";
+import { RecruitmentController } from "../controllers/recruitment.controller";
+// import { OnboardingController } from "../controllers/onboarding-requirements.controller";
+// import { OffboardingController } from "../controllers/offboarding-requirements.controller";
 
 // Services
-import { RecruitmentService } from "../services/Recruitment/recruitment.service";
-import { OnboardingService } from "../services/onboarding.service";
-import { OffboardingService } from "../services/offboarding.service";
+import { RecruitmentService } from "../services/recruitment.service";
+// import { OnboardingService } from "../services/onboarding-requirements.service";
+// import { OffboardingService } from "../services/offboarding-requirements.service";
 
 @Module({
     imports: [
@@ -46,8 +46,12 @@ import { OffboardingService } from "../services/offboarding.service";
             { name: TerminationRequest.name, schema: TerminationRequestSchema },
         ]),
     ],
-    controllers: [RecruitmentController, OnboardingController, OffboardingController],
-    providers: [RecruitmentService, OnboardingService, OffboardingService],
-    exports: [RecruitmentService, OnboardingService, OffboardingService]
+    controllers: [RecruitmentController],
+    providers: [RecruitmentService],
+    exports: [RecruitmentService]
 })
 export class RecruitmentModule {}
+
+
+//OnboardingController, OffboardingController
+//OnboardingService, OffboardingService

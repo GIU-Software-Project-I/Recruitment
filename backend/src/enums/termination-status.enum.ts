@@ -1,8 +1,6 @@
 export enum TerminationStatus {
-  PENDING = 'pending',
-  UNDER_REVIEW = 'under_review',
-  APPROVED = 'approved',
-  REJECTED = 'rejected',
-  CLEARED = 'cleared',
-  COMPLETED = 'completed',
+    PENDING = 'pending',
+    UNDER_REVIEW = 'under_review',
+    APPROVED = 'approved',
+    REJECTED = 'rejected',
 }

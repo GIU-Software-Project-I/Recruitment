@@ -21,7 +21,7 @@ import {
     ApiBearerAuth,
 } from '@nestjs/swagger';
 
-import { RecruitmentService } from '../../services/Recruitment/recruitment.service';
+import { RecruitmentService } from '../services/recruitment.service';
 
 // DTOs
 import {
@@ -44,11 +44,11 @@ import {
     CandidateOfferResponseDto,
     SendNotificationDto,
     SendRejectionDto,
-} from '../../dto/recruitment';
+} from '../dto/recruitment';
 
 // Enums
-import { ApplicationStage } from '../../enums/application-stage.enum';
-import { ApplicationStatus } from '../../enums/application-status.enum';
+import { ApplicationStage } from '../enums/application-stage.enum';
+import { ApplicationStatus } from '../enums/application-status.enum';
 
 @ApiTags('Recruitment')
 @Controller('recruitment')

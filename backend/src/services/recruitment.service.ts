@@ -3,15 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
 // Models
-import { JobTemplate, JobTemplateDocument } from '../../models/job-template.schema';
-import { JobRequisition, JobRequisitionDocument } from '../../models/job-requisition.schema';
-import { Application, ApplicationDocument } from '../../models/application.schema';
-import { ApplicationStatusHistory, ApplicationStatusHistoryDocument } from '../../models/application-history.schema';
-import { Referral, ReferralDocument } from '../../models/referral.schema';
-import { Interview, InterviewDocument } from '../../models/intervies.schema';
-import { AssessmentResult, AssessmentResultDocument } from '../../models/assessment-result.schema';
-import { Offer, OfferDocument } from '../../models/offer.schema';
-import { Contract, ContractDocument } from '../../models/contract.schema';
+import { JobTemplate, JobTemplateDocument } from '../models/job-template.schema';
+import { JobRequisition, JobRequisitionDocument } from '../models/job-requisition.schema';
+import { Application, ApplicationDocument } from '../models/application.schema';
+import { ApplicationStatusHistory, ApplicationStatusHistoryDocument } from '../models/application-history.schema';
+import { Referral, ReferralDocument } from '../models/referral.schema';
+import { Interview, InterviewDocument } from '../models/interview.schema';
+import { AssessmentResult, AssessmentResultDocument } from '../models/assessment-result.schema';
+import { Offer, OfferDocument } from '../models/offer.schema';
+import { Contract, ContractDocument } from '../models/contract.schema';
 
 // DTOs
 import {
@@ -33,15 +33,15 @@ import {
     CandidateOfferResponseDto,
     SendNotificationDto,
     SendRejectionDto,
-} from '../../dto/recruitment';
+} from '../dto/recruitment';
 
 // Enums
-import { ApplicationStage } from '../../enums/application-stage.enum';
-import { ApplicationStatus } from '../../enums/application-status.enum';
-import { InterviewStatus } from '../../enums/interview-status.enum';
-import { OfferFinalStatus } from '../../enums/offer-final-status.enum';
-import { OfferResponseStatus } from '../../enums/offer-response-status.enum';
-import { ApprovalStatus } from '../../enums/approval-status.enum';
+import { ApplicationStage } from '../enums/application-stage.enum';
+import { ApplicationStatus } from '../enums/application-status.enum';
+import { InterviewStatus } from '../enums/interview-status.enum';
+import { OfferFinalStatus } from '../enums/offer-final-status.enum';
+import { OfferResponseStatus } from '../enums/offer-response-status.enum';
+import { ApprovalStatus } from '../enums/approval-status.enum';
 
 @Injectable()
 export class RecruitmentService {
@@ -876,7 +876,7 @@ export class RecruitmentService {
         }
 
         // TODO: Integration with Onboarding module
-        // This would create onboarding tasks and notify relevant parties
+        // This would create onboarding-requirements tasks and notify relevant parties
 
         return {
             triggered: true,

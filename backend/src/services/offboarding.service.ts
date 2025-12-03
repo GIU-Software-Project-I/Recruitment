@@ -8,17 +8,7 @@ import { ClearanceChecklist, ClearanceChecklistDocument } from '../models/cleara
 import { Contract, ContractDocument } from '../models/contract.schema';
 
 // DTOs
-import {
-    CreateTerminationRequestDto,
-    CreateResignationRequestDto,
-    UpdateTerminationStatusDto,
-    CreateClearanceChecklistDto,
-    UpdateClearanceItemDto,
-    UpdateEquipmentItemDto,
-    UpdateCardReturnDto,
-    RevokeAccessDto,
-    TriggerFinalSettlementDto,
-} from '../dto/offboarding';
+import {CreateTerminationRequestDto, CreateResignationRequestDto, UpdateTerminationStatusDto, CreateClearanceChecklistDto, UpdateClearanceItemDto, UpdateEquipmentItemDto, UpdateCardReturnDto, RevokeAccessDto, TriggerFinalSettlementDto,} from '../dto/offboarding';
 
 // Enums
 import { TerminationInitiation } from '../enums/termination-initiation.enum';

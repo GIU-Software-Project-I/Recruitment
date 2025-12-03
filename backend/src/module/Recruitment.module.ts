@@ -25,6 +25,8 @@ import { RecruitmentController } from "../controllers/recruitment.controller";
 import { RecruitmentService } from "../services/recruitment.service";
 import {OffboardingService} from "../services/offboarding.service";
 import {OffboardingController} from "../controllers/offboarding.controller";
+import {OnboardingController} from "../controllers/onboarding.controller";
+import {OnboardingService} from "../services/onboarding.service";
 // import { OnboardingService } from "../services/offboarding.requirements.service";
 // import { OffboardingService } from "../services/onboarding.requirements.service";
 
@@ -48,9 +50,9 @@ import {OffboardingController} from "../controllers/offboarding.controller";
             { name: TerminationRequest.name, schema: TerminationRequestSchema },
         ]),
     ],
-    controllers: [RecruitmentController, OffboardingController],
-    providers: [RecruitmentService, OffboardingService],
-    exports: [RecruitmentService, OffboardingService]
+    controllers: [RecruitmentController, OnboardingController, OffboardingController],
+    providers: [RecruitmentService, OnboardingService, OffboardingService],
+    exports: [RecruitmentService, OnboardingService, OffboardingService]
 })
 export class RecruitmentModule {}
 

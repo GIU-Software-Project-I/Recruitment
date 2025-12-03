@@ -18,13 +18,15 @@ import { TerminationRequest, TerminationRequestSchema } from "../models/terminat
 
 // Controllers
 import { RecruitmentController } from "../controllers/recruitment.controller";
-// import { OnboardingController } from "../controllers/onboarding-requirements.controller";
-// import { OffboardingController } from "../controllers/offboarding-requirements.controller";
+// import { OnboardingController } from "../controllers/offboarding.requirements.controller";
+// import { OffboardingController } from "../controllers/onboarding.requirements.controller";
 
 // Services
 import { RecruitmentService } from "../services/recruitment.service";
-// import { OnboardingService } from "../services/onboarding-requirements.service";
-// import { OffboardingService } from "../services/offboarding-requirements.service";
+import {OffboardingService} from "../services/offboarding.service";
+import {OffboardingController} from "../controllers/offboarding.controller";
+// import { OnboardingService } from "../services/offboarding.requirements.service";
+// import { OffboardingService } from "../services/onboarding.requirements.service";
 
 @Module({
     imports: [
@@ -46,9 +48,9 @@ import { RecruitmentService } from "../services/recruitment.service";
             { name: TerminationRequest.name, schema: TerminationRequestSchema },
         ]),
     ],
-    controllers: [RecruitmentController],
-    providers: [RecruitmentService],
-    exports: [RecruitmentService]
+    controllers: [RecruitmentController, OffboardingController],
+    providers: [RecruitmentService, OffboardingService],
+    exports: [RecruitmentService, OffboardingService]
 })
 export class RecruitmentModule {}
 

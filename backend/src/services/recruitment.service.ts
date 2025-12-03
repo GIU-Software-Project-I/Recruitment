@@ -876,7 +876,7 @@ export class RecruitmentService {
         }
 
         // TODO: Integration with Onboarding module
-        // This would create onboarding-requirements tasks and notify relevant parties
+        // This would create offboarding.requirements tasks and notify relevant parties
 
         return {
             triggered: true,

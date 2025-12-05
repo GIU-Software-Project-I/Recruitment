@@ -72,12 +72,11 @@ Key BRs (IDs): BR 13(b, c), Clearance checklist required across departments (IT,
 
 
 
-
 Requirement Name: Exit Settlements & Benefits
 
-User Stories Needed (IDs/titles): OFF-013, As HR Manager, I want to send offboarding notification to trigger benefits termination and final pay calc (unused leave, deductions), so settlements are accurate.
+User Stories Needed (IDs/titles): OFF-013, As HR Manager, I want to send offboarding notification to trigger benefits termination and final pay calc (unused leave, deductions), so settlements are accurate.which means you need to trigger service that fills collection that relates user to benefit which is in payroll execution module
 
-Inputs Needed from Other Sub‑Systems:  	Leaves Module (Balance), Employee Profile (Benefits)
+Inputs Needed from Other Sub‑Systems: 	Leaves Module (Balance), Employee Profile (Benefits)
 
 Downstream Sub‑Systems Depending on This Output: Payroll Module (PY)
 
@@ -97,7 +96,6 @@ Inputs Needed from Other Sub‑Systems: Employee Profile (Resignation Reason)
 Downstream Sub‑Systems Depending on This Output: Offboarding Approval Workflow
 
 Key BRs (IDs): BR 6	Employee separation can be triggered by resignation. A clearly identified offboarding approval workflow should be identified (e.g., Employee resigning > Line Manager > Financial approval > HR processing/approval).
-
 
 
 
@@ -125,13 +123,6 @@ Step	Requirement ID	User Story Summary / Action
 
 
 
-
-Phase III: Offboarding (Separation & Clearance)
-
-
-
-
-
 Phase III: Offboarding (Separation & Clearance)
 
 
@@ -148,7 +139,9 @@ Data Flow: Status triggers workflow approval.
 
 
 
-14. Clearance & Assets	HR Manager
+14. Clearance & Assets
+
+HR Manager
 
 Manage offboarding checklist and departmental sign-offs (IT, Finance, Facilities, etc.) [OFF-006, OFF-010].	US: OFF-006, OFF-010. BR: Multi-department clearance required; completion tracked.
 
@@ -185,4 +178,4 @@ Data Flow: Sends encashment data from Leaves; triggers Payroll processing.
 
 
 
-1. NEED TO INTEGRATE WITH PERFORMANCE MODULE
+

@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import {RecruitmentModule} from "./module/Recruitment.module";
+import {RecruitmentModule} from "./module/recruitment.module";
 
 
 

@@ -1,0 +1,496 @@
+Recruitment Subsystem
+
+
+Recruitment Subsystem Description
+The Recruitment, Onboarding, Offboarding Subsystem manages the entire employee lifecycle,
+from attracting and hiring talent, through integrating new employees, to facilitating structured and
+compliant separations. It ensures that hiring, onboarding, and exit processes are efficient, auditable, and
+integrated across HR, IT, and payroll systems.
+
+The subsystem automates key HR activities, enhances
+candidate and employee experiences, and maintains compliance with organizational and legal standards.
+By connecting recruitment pipelines to onboarding workflows and offboarding checklists, it guarantees
+data consistency, seamless transitions, and controlled access management throughout the employment
+journey. This module is functionally divided into three core processes, which are tightly integrated with
+the Employee Profile, Organizational Structure and Payroll.
+
+
+Requirements
+
+Workflow Description
+
+The workflow represents the logical progression of activities through three interconnected phases:
+
+
+Phase 1: Recruitment (REC) This phase begins with job design and posting, progresses through
+candidate application, tracking, evaluation, and communication, and concludes with job offer generation
+and acceptance. Successful offer acceptance automatically triggers pre-boarding tasks and transitions data
+to the Onboarding phase.
+
+
+Phase 2: Onboarding (ONB) The onboarding phase focuses on transforming the accepted candidate
+into an active employee. It includes creating onboarding task checklists, collecting documentation, provisioning access, assigning resources, and initiating payroll and benefits. Automated notifications guideboth HR teams and new hires to ensure readiness before Day 1.
+
+
+Phase 3: Offboarding (OFF) This phase manages the structured and compliant exit of employees. It
+covers resignation or termination initiation, clearance workflows, access revocation, and final settlements.
+
+
+Integration with payroll, IT, and facilities ensures that all assets are recovered, benefits are closed, and
+access rights are securely revoked.
+
+
+Together, these phases form a closed-loop lifecycle that supports continuous HR operations, linking
+recruitment decisions directly to onboarding preparation and offboarding compliance. This ensures traceability, efficiency, and security across the entire employee journey.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Recruitment Process
+
+
+
+
+Requirement Name:Job Design & Posting
+
+User Stories Needed (IDs/titles): REC-003 As an HR Manager, I want to define standardized job description templates, so that postings are consistent. Each job requisition must include Job details (title, department, location, openings) and Qualifications and skills needed.
+
+
+Inputs Needed from Other Sub‑Systems: Organizational Structure (OS) (Jobs/Positions)
+Downstream Sub‑Systems Depending on This Output: Recruitment (Job Posting)
+
+Key BRs (IDs): BR 2 Each job requisition must include Job details (title, department, location, openings) and Qualifications and skills needed.
+
+
+
+
+
+
+Requirement Name: Job Design & Posting
+
+User Stories Needed (IDs/titles): REC-004 As an HR Manager, I want to be able to establish hiring processes templates so that the system can automatically update progress percentage. Each application must be tracked through defined stages (e.g., Screening, Shortlisting, Interview, Offer, Hired).
+
+Inputs Needed from Other Sub‑Systems: None (System Configuration)
+
+Downstream Sub‑Systems Depending on This Output: Recruitment (Candidate Tracking)
+
+Key BRs (IDs): BR 9	Each application must be tracked through defined stages (e.g., Screening, Shortlisting, Interview, Offer, Hired).
+
+
+
+ 
+
+
+
+
+Requirement Name: Job Design & Posting
+
+User Stories Needed (IDs/titles): REC-023 As a HR Employee, I want to preview and publish jobs on the company careers page with employer-brand content, so openings look professional.
+
+
+Inputs Needed from Other Sub‑Systems: None
+
+Downstream Sub‑Systems Depending on This Output: External Careers Page
+
+Key BRs (IDs): BR 6 The system must allow automatic posting of approved requisitions to internal and external career sites.
+
+
+
+
+
+Requirement Name: Candidate App. & Comm.
+
+
+User Stories Needed (IDs/titles): REC-007 As a Candidate, I want to upload my CV and apply for positions, so that I can be considered for opportunities.
+
+Inputs Needed from Other Sub‑Systems: Candidate CVs/Documents
+
+Downstream Sub‑Systems Depending on This Output: Recruitment (Talent Pool)
+
+Key BRs (IDs): BR 12 The system must support the storage/upload of applications with resumes, which creates the organization's talent pool.
+
+
+
+
+
+Requirement Name: Candidate App. & Comm.
+
+User Stories Needed (IDs/titles): REC-017 As a Candidate, I want to receive updates about my application status, so that I know where I stand.
+
+
+Inputs Needed from Other Sub‑Systems: Recruitment (Candidate Status Tracking)
+
+Downstream Sub‑Systems Depending on This Output: Candidate Self-Service Portal
+
+Key BRs (IDs): BR 27, Candidate Status Tracking must be easily visualized and up-to-date in real-time.
+
+BR 36 The system must send automated alerts/emails to candidates regarding status updates.
+
+
+
+
+
+
+Requirement Name: Candidate App. & Comm.
+
+User Stories Needed (IDs/titles): REC-022 As a HR Employee, I want automated rejection notifications and templates, so candidates are informed respectfully and consistently.
+
+
+Inputs Needed from Other Sub‑Systems: Recruitment (Rejection Reason/Template)
+
+Downstream Sub‑Systems Depending on This Output: External Communication (Candidate Email)
+
+Key BRs (IDs): BR 36, The system must support email templates for communication (e.g., rejection).
+
+BR 37 Communication logs must be stored in the applicant profile.
+
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-008 As a HR Employee, I want to track candidates through each stage of the hiring process, so that I can manage progress.
+
+
+Inputs Needed from Other Sub‑Systems: Hiring Process Template (REC-004)
+
+Downstream Sub‑Systems Depending on This Output:  Recruitment (Status Tracking)
+
+Key BRs (IDs): BR 9, BR 11 Applications must be tracked through defined stages.
+
+BR 11 Recruiters and hiring managers must be notified of status changes via alerts or workflow emails.
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-010 As a HR Employee, I want to schedule and manage interview invitations, so that candidates are engaged efficiently.
+
+
+Inputs Needed from Other Sub‑Systems: Time Management (TM), Email/Calendar systems
+
+Downstream Sub‑Systems Depending on This Output: Notifications (N)
+
+Key BRs (IDs): BR 19(a, c, d)	Recruiters must be able to schedule interviews by selecting time slots, panel members, and modes. Interviewers must receive automatic calendar invites, and candidates must be notified automatically.
+
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-011 As an HR Employee, I want to be able to provide feedback/interview score for scheduled interviews for filtration. Recruiters must be able to schedule interviews by selecting time slots, panel members, and modes. Interviewers must receive automatic calendar invites, and candidates must be notified automatically."
+
+
+Inputs Needed from Other Sub‑Systems: Interview panel feedback/scores
+
+Downstream Sub‑Systems Depending on This Output: Recruitment (Applicant Scoring)
+
+Key BRs (IDs): BR 10,  	The system must allow adding comments and ratings at each stage.
+
+ BR 22 Feedback at each stage must be submitted by the panel/interviewers to ensure accuracy.
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-020 As an HR Employee, I want structured assessment and scoring forms per role, so evaluations are consistent and auditable.
+
+
+Inputs Needed from Other Sub‑Systems: Evaluation Criteria (REC-015)	Recruitment (Applicant Scoring)
+
+
+Downstream Sub‑Systems Depending on This Output: Recruitment (Applicant Scoring)
+
+
+Key BRs (IDs): BR 21, The system needs to allow/house the multiple assessment tools to be used.
+
+
+BR 23	Criteria used in interview assessment are pre-set and agreed upon. The system needs to allow/house the multiple assessment tools to be used.
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-021 As a HR Employee, I want to coordinate interview panels (members, availability, scoring), so scheduling and feedback collection are centralized.
+
+
+Inputs Needed from Other Sub‑Systems: Calendar/Time Management (Availability)	Recruitment (Interview Scheduling/Feedback)
+
+Downstream Sub‑Systems Depending on This Output: Recruitment (Interview Scheduling/Feedback)
+
+Key BRs (IDs): BR 19(a, b), BR 20	Interview scheduling requires selecting panel members. Panels need to possess the knowledge and/or training to conduct the needed interviews/selection tests.
+
+
+
+
+
+
+
+
+Requirement Name: Candidate Tracking & Eval.
+
+User Stories Needed (IDs/titles): REC-030 As a HR Employee, I want to be able to tag candidates as referrals in order to give them a higher chance of having an earlier interview.
+
+
+Inputs Needed from Other Sub‑Systems: Candidate data, Referral source info	Recruitment
+
+Downstream Sub‑Systems Depending on This Output:  Recruitment
+
+Key BRs (IDs): BR 14, Electronic screening includes rule-based filters.
+
+BR 25 Tie-Breaking Rules should be predetermined and could be based on Internal candidate preference.
+
+
+
+
+
+
+Requirement Name: Recruitment Analytics
+
+User Stories Needed (IDs/titles): REC-009 As an HR Manager, I want to monitor recruitment progress across all open positions, so that I stay informed.
+
+Inputs Needed from Other Sub‑Systems: Recruitment data (REC-008)
+
+
+Downstream Sub‑Systems Depending on This Output: Recruitment
+
+Key BRs (IDs): BR 33	Multiple reports could be generated like time-to-hire and source effectiveness.
+
+
+
+
+
+
+
+
+Requirement Name: Compliance & B. Checks
+
+User Stories Needed (IDs/titles): REC-028As a Candidate, I want to give consent for personal-data processing and background checks, so the system remains compliant with privacy laws.
+
+Inputs Needed from Other Sub‑Systems: None (Candidate input)	Recruitment
+Downstream Sub‑Systems Depending on This Output: Recruitment
+
+Key BRs (IDs): BR 28, Storing the talent pool needs to be authorized by applicants in the early stages of the recruitment process.
+
+NFR-33 All data handling must comply with GDPR and labor laws.
+
+
+
+
+
+
+Requirement Name: Offers & Hiring Decisions
+
+User Stories Needed (IDs/titles): REC-014 As an HR Manager, I want to manage job offers and approvals, so that candidates can be hired smoothly.
+
+
+Inputs Needed from Other Sub‑Systems: Financial Approval (REC-027)
+
+
+Downstream Sub‑Systems Depending on This Output: Onboarding
+
+Key BRs (IDs): BR 26(b, c)	The system must support securing related parties’ approval before sending out the offer. Once candidate acceptance is received, the next module (Onboarding) should be triggered.
+
+
+
+
+
+
+
+
+Requirement Name: Offers & Hiring Decisions
+
+User Stories Needed (IDs/titles): REC-018	As a HR Employee/HR Manager, I want to generate, send and collect electronically signed offer letters, so candidates can accept offers quickly and legally.
+
+
+
+Inputs Needed from Other Sub‑Systems: Offer template, Candidate signature data
+
+Downstream Sub‑Systems Depending on This Output:  Onboarding
+
+Key BRs (IDs): BR 26(a, d), The system supports issuing an offer letter which needs to be customizable and editable (e.g., include compensation/benefits)
+
+BR 37 Communication logs must be stored.
+
+
+
+
+
+
+Requirement Name: Offers & Hiring Decisions
+
+User Stories Needed (IDs/titles): REC-029	As a HR Employee, I want to trigger pre-boarding tasks (contract signing, forms) after offer acceptance and before the start date, so new hire readiness is improved
+
+Inputs Needed from Other Sub‑Systems: Offer Acceptance Status
+
+
+Downstream Sub‑Systems Depending on This Output: Onboarding Module (Task Checklist)
+
+Key BRs (IDs): BR 26(c)	Once a candidate’s acceptance is received, the next module (Onboarding) should be triggered.
+
+
+
+
+
+
+Workflow: Minimized Recruitment, Onboarding, and Offboarding
+The workflow traces the sequence of actions starting from job definition (Recruitment) through new hire setup (Onboarding) and finally through separation (Offboarding).
+
+
+Phase 1: Recruitment (REC)
+This phase manages attracting and selecting candidates, culminating in a signed offer and the triggering of pre-boarding tasks.
+
+Step	                  Requirement ID	User Story Summary / Action
+
+1. Preparation & Templates	REC-003	        HR Manager defines standardized job description templates.
+
+2. Process Definition	        REC-004	        HR Manager establishes hiring process templates for stages and progress updates.
+
+3. Job Posting	                REC-023	         HR Employee previews and publishes jobs on the company careers page.
+
+4. Application & Consent	REC-007	        Candidate uploads CV and applies for a position.
+	                        REC-028  	Candidate gives consent for personal-data processing.
+
+5. Referral Tagging	         REC-030	HR Employee tags candidates as referrals.
+
+6. Candidate Tracking	       REC-008	         HR Employee tracks candidates through each stage of the hiring process.
+	                       REC-009	        HR Manager monitors recruitment progress across open positions.
+
+7. Evaluation Setup	       REC-020	         HR Employee uses structured assessment and scoring forms per role.
+
+8. Interview Coordination	REC-010	HR Employee schedules and manages interview invitations.
+	REC-021	HR Employee coordinates interview panels.
+
+9. Feedback & Scoring	REC-011	HR Employee provides feedback/interview score for filtration.
+
+10. Communication	REC-017	Candidate receives updates about application status.
+	REC-022	HR Employee sends automated rejection notifications.
+
+11. Offer Management	REC-014	HR Manager manages job offers and approvals.
+	REC-018	HR Employee/Manager generates, sends and collects electronically signed offer letters.
+
+12. Handoff to Onboarding	REC-029	HR Employee triggers pre-boarding tasks after offer acceptance.
+
+
+Futher Elaboration
+Step	Actor	Action / Process	Supporting User Stories (US) and Rules (BR)	Outputs & Data Flow
+
+
+Phase I: Recruitment (Acquisition & Offer)
+
+
+1. Setup Templates
+
+HR Manager
+
+Define standardized job description templates [REC-003] and establish hiring process templates [REC-004].
+
+US: REC-003, REC-004. BR: Process template defines stages and progress percentage.
+
+Output: Standardized Templates (Stored).
+
+Data Flow: Consumed by job posting (REC-023).
+
+
+
+2. Publish Job
+
+HR Employee
+
+Preview and publish jobs on the company careers page [REC-023].
+
+US: REC-023. BR: Posting must be automatic once approved.
+
+Output: Active Job Posting (Live).
+
+Data Flow: Feeds job list to Candidate Dashboard. Updates Org Structure (position marked “Vacant”).
+
+
+
+3. Application & Consent
+
+Candidate
+Upload CV [REC-007] and give consent for personal-data processing [REC-028].
+US: REC-007, REC-028. BR: Storing applications requires applicant authorization.
+Output: Applicant Record; Consent Logged.
+Data Flow: CV stored in Talent Pool; consent enables compliance checks.
+
+
+
+4. Pipeline & Tags
+
+HR Employee
+
+Tag candidates as referrals [REC-030] and track candidates through each stage of the hiring process [REC-008].	US: REC-030, REC-008. BR: Applications tracked through defined stages.
+Referrals get preferential filtering.
+
+Output: Updated Candidate Status; Referral Tagged.
+
+Data Flow: Status change triggers notifications (N-004).
+
+
+
+5. Evaluation
+
+HR Employee
+
+Use structured assessment and scoring forms per role [REC-020], coordinate interviews [REC-021], and schedule/manage invitations [REC-010].	US: REC-020, REC-021, REC-010, REC-011. BR: Structured assessment forms required; ranking rules enforced.
+
+Output: Interview Feedback / Score Completed.
+Data Flow: Scores logged to candidate record for ranking.
+
+
+
+6. Monitoring & Communication
+
+HR Manager / Candidate
+
+HR monitors recruitment progress [REC-009]; candidates get automatic updates [REC-017].	US: REC-009, REC-017. BR: Status tracking must be real-time and visualized; automated notifications required.
+
+Output: Progress Dashboard View; Status Notifications (N-051).
+
+Data Flow: Consumes pipeline data.
+
+
+
+7. Offer & Transition
+
+HR Manager / HR Employee
+
+Manage job offers and approvals [REC-014]; generate and send e-signed offers [REC-018]; send automated rejections [REC-022]; trigger pre-boarding [REC-029].	US: REC-014, REC-018, REC-022, REC-029. BR: Offer acceptance triggers Onboarding; offer data used for contract creation.
+
+Output: Signed Offer Letter (Stored); Rejection Sent.
+
+Data Flow: Triggers Onboarding initiation; data populates Employee Profile.
+
+

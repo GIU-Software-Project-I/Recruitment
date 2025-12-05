@@ -1,5 +1,225 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=WebStorm
+### ============================================================
+### Onboarding Module - HTTP Testing
+### All requirements implemented as per onboarding.requirements
+### ============================================================
 
-###
+### Candidate Upload Signed Contract & Forms - Initiate Onboarding
+POST http://localhost:4444/onboarding/upload-contract
+Content-Type: application/json
+
+{
+  "ownerId": "69304021613ea6ebb1f7617b",
+  "type": "contract",
+  "filePath": "/uploads/documents/signed-offer-letter-12345.pdf"
+}
+
+### ============================================================
+### ONB-001: Create Onboarding Checklist (HR Manager)
+### BR 8, 11: Customizable checklists with department-specific tasks
+### NOTE: Tasks MUST be provided - they can be customized per employee/department
+POST http://localhost:4444/onboarding
+Content-Type: application/json
+
+{
+  "employeeId": "507f1f77bcf86cd799439011",
+  "contractId": "507f1f77bcf86cd799439012",
+  "tasks": [
+    {
+      "name": "Complete I-9 Form",
+      "department": "HR",
+      "deadline": "2026-01-15T00:00:00.000Z",
+      "notes": "Required by Day 1"
+    },
+    {
+      "name": "Upload ID Documents",
+      "department": "HR",
+      "notes": "Government-issued ID"
+    },
+    {
+      "name": "Sign Employee Handbook",
+      "department": "HR",
+      "notes": "Acknowledge policies"
+    },
+    {
+      "name": "Complete Tax Forms (W-4)",
+      "department": "HR",
+      "notes": "For payroll setup"
+    },
+    {
+      "name": "Enroll in Benefits",
+      "department": "HR",
+      "deadline": "2026-01-12T00:00:00.000Z",
+      "notes": "Health insurance, 401k"
+    },
+    {
+      "name": "IT System Access Setup",
+      "department": "IT",
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Email, laptop, system access"
+    },
+    {
+      "name": "Security Training",
+      "department": "IT",
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Cybersecurity awareness"
+    },
+    {
+      "name": "Desk and Equipment Assignment",
+      "department": "Admin",
+      "deadline": "2026-01-08T00:00:00.000Z",
+      "notes": "Workspace ready"
+    },
+    {
+      "name": "ID Badge Issuance",
+      "department": "Admin",
+      "deadline": "2026-01-08T00:00:00.000Z",
+      "notes": "Building access"
+    },
+    {
+      "name": "Department Orientation",
+      "department": "Manager",
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Meet the team"
+    }
+  ]
+}
+
+### Get All Onboarding Checklists
+GET http://localhost:4444/onboarding
+
+### Get Onboarding by ID
+GET http://localhost:4444/onboarding/69328e89111526edb467caf3
+
+### Add Task to Onboarding Checklist
+POST http://localhost:4444/onboarding/69328e89111526edb467caf3
+Content-Type: application/json
+
+{
+  "name": "Department Orientation",
+  "department": "Manager",
+  "deadline": "2026-01-20T00:00:00.000Z",
+  "notes": "Meet the team"
+}
+
+### ============================================================
+### ONB-002: Access Signed Contract Details (HR Manager)
+GET http://localhost:4444/onboarding/contracts/507f1f77bcf86cd799439012
+
+### ============================================================
+### ONB-004: View Onboarding Tracker (New Hire)
+GET http://localhost:4444/onboarding/employee/507f1f77bcf86cd799439011
+
+### Get Onboarding Progress
+GET http://localhost:4444/onboarding/507f1f77bcf86cd799439013/progress
+
+### Update Task Status
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/Complete I-9 Form/status
+Content-Type: application/json
+
+{
+  "status": "completed",
+  "completedAt": "2025-12-15T10:30:00.000Z"
+}
+
+### Update Task to In Progress
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/IT System Access Setup/status
+Content-Type: application/json
+
+{
+  "status": "in_progress"
+}
+
+### ============================================================
+### ONB-005: Get Pending Tasks with Reminders (New Hire)
+GET http://localhost:4444/onboarding/employee/507f1f77bcf86cd799439011/pending-tasks
+
+### ============================================================
+### ONB-007: Upload Compliance Documents (New Hire)
+POST http://localhost:4444/onboarding/documents
+Content-Type: application/json
+
+{
+  "ownerId": "507f1f77bcf86cd799439011",
+  "type": "id",
+  "filePath": "/uploads/documents/drivers-license-12345.pdf"
+}
+
+### Upload Certificate
+POST http://localhost:4444/onboarding/documents
+Content-Type: application/json
+
+{
+  "ownerId": "507f1f77bcf86cd799439011",
+  "type": "certificate",
+  "filePath": "/uploads/documents/degree-certificate.pdf"
+}
+
+### Get Documents by Owner
+GET http://localhost:4444/onboarding/documents/owner/507f1f77bcf86cd799439011
+
+### Link Document to Task
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/Upload ID Documents/document
+Content-Type: application/json
+
+{
+  "documentId": "507f1f77bcf86cd799439014"
+}
+
+### ============================================================
+### ONB-009: Provision System Access (System Admin)
+POST http://localhost:4444/onboarding/provision-access
+Content-Type: application/json
+
+{
+  "employeeId": "507f1f77bcf86cd799439011",
+  "startDate": "2026-01-01T00:00:00.000Z",
+  "notes": "Grant developer access to GitHub, Jira, and AWS"
+}
+
+### ============================================================
+### ONB-012: Reserve Equipment and Resources (HR Employee)
+POST http://localhost:4444/onboarding/reserve-equipment
+Content-Type: application/json
+
+{
+  "employeeId": "507f1f77bcf86cd799439011",
+  "equipment": ["Laptop Dell XPS 15", "Monitor 27 inch", "Keyboard", "Mouse", "Headset"],
+  "deskNumber": "D-301",
+  "accessCardNumber": "AC-98765",
+  "notes": "Developer needs dual monitors"
+}
+
+### ============================================================
+### ONB-013: Schedule Access Revocation (HR Manager)
+POST http://localhost:4444/onboarding/schedule-access-revocation
+Content-Type: application/json
+
+{
+  "employeeId": "507f1f77bcf86cd799439011",
+  "revocationDate": "2026-12-31T23:59:59.000Z",
+  "notes": "Auto-revoke on contract end date"
+}
+
+### ============================================================
+### ONB-018: Trigger Payroll Initiation (HR Manager)
+POST http://localhost:4444/onboarding/trigger-payroll-initiation
+Content-Type: application/json
+
+{
+  "contractId": "507f1f77bcf86cd799439012",
+  "notes": "Include signing bonus in first payroll"
+}
+
+### ============================================================
+### ONB-019: Process Signing Bonus (HR Manager)
+POST http://localhost:4444/onboarding/contracts/507f1f77bcf86cd799439012/process-signing-bonus
+
+### ============================================================
+### ONB-020: Cancel Onboarding - No Show (HR Manager)
+DELETE http://localhost:4444/onboarding/507f1f77bcf86cd799439013/cancel
+Content-Type: application/json
+
+{
+  "reason": "No-show on first day, no response to calls or emails"
+}
+

@@ -1,8 +1,18 @@
 import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { OffboardingService } from '../services/offboarding.service';
-import {CreateTerminationRequestDto, CreateResignationRequestDto, UpdateTerminationStatusDto, CreateClearanceChecklistDto, UpdateClearanceItemDto, UpdateEquipmentItemDto, UpdateCardReturnDto,RevokeAccessDto, TriggerFinalSettlementDto,} from '../dto/offboarding';
+import {
+    CreateTerminationRequestDto,
+    CreateResignationRequestDto,
+    UpdateTerminationStatusDto,
+    CreateClearanceChecklistDto,
+    UpdateClearanceItemDto,
+    UpdateEquipmentItemDto,
+    RevokeAccessDto,
+    TriggerFinalSettlementDto,
+} from '../dto/offboarding';
 import { TerminationStatus } from '../enums/termination-status.enum';
+import { TerminationInitiation } from '../enums/termination-initiation.enum';
 
 @ApiTags('Offboarding')
 @Controller('offboarding')
@@ -30,16 +40,55 @@ export class OffboardingController {
     @Get('termination-requests')
     @ApiOperation({
         summary: 'Get all termination requests',
-        description: 'Retrieve all termination requests with optional filtering by employee or status',
+        description: 'Retrieve all termination requests with optional filtering by employee, status, and initiator',
     })
     @ApiQuery({ name: 'employeeId', required: false, description: 'Filter by employee ID' })
     @ApiQuery({ name: 'status', required: false, enum: TerminationStatus, description: 'Filter by status' })
+    @ApiQuery({ name: 'initiator', required: false, enum: TerminationInitiation, description: 'Filter by initiator (employee, hr, manager)' })
     @ApiResponse({ status: 200, description: 'List of termination requests' })
     async getAllTerminationRequests(
         @Query('employeeId') employeeId?: string,
         @Query('status') status?: TerminationStatus,
+        @Query('initiator') initiator?: TerminationInitiation,
     ) {
-        return this.offboardingService.getAllTerminationRequests(employeeId, status);
+        return this.offboardingService.getAllTerminationRequests(employeeId, status, initiator);
+    }
+
+    @Get('termination-requests/by-initiator/:initiator')
+    @ApiOperation({
+        summary: 'Get termination requests by initiator',
+        description: 'Get all termination/resignation requests filtered by initiator (employee=resignations, hr/manager=terminations)',
+    })
+    @ApiParam({ name: 'initiator', enum: TerminationInitiation, description: 'Initiator type: employee, hr, or manager' })
+    @ApiQuery({ name: 'status', required: false, enum: TerminationStatus, description: 'Optional status filter' })
+    @ApiResponse({ status: 200, description: 'List of termination requests by initiator' })
+    async getTerminationRequestsByInitiator(
+        @Param('initiator') initiator: TerminationInitiation,
+        @Query('status') status?: TerminationStatus,
+    ) {
+        return this.offboardingService.getTerminationRequestsByInitiator(initiator, status);
+    }
+
+    @Get('resignation-requests/all')
+    @ApiOperation({
+        summary: 'Get all resignation requests',
+        description: 'Get all employee-initiated resignation requests (convenience endpoint)',
+    })
+    @ApiQuery({ name: 'status', required: false, enum: TerminationStatus, description: 'Optional status filter' })
+    @ApiResponse({ status: 200, description: 'List of all resignation requests' })
+    async getAllResignationRequests(@Query('status') status?: TerminationStatus) {
+        return this.offboardingService.getAllResignationRequests(status);
+    }
+
+    @Get('termination-requests/by-status/:status')
+    @ApiOperation({
+        summary: 'Get termination requests by status',
+        description: 'Get all termination/resignation requests with a specific status across all initiators',
+    })
+    @ApiParam({ name: 'status', enum: TerminationStatus, description: 'Status: pending, under_review, approved, or rejected' })
+    @ApiResponse({ status: 200, description: 'List of termination requests with specified status' })
+    async getTerminationRequestsByStatus(@Param('status') status: TerminationStatus) {
+        return this.offboardingService.getTerminationRequestsByStatus(status);
     }
 
     @Get('termination-requests/:id')
@@ -112,6 +161,7 @@ export class OffboardingController {
     async getResignationRequestByEmployeeId(@Param('employeeId') employeeId: string) {
         return this.offboardingService.getResignationRequestByEmployeeId(employeeId);
     }
+
 
     // ============================================================
     // Requirement: Clearance, Handover & Access Revocation
@@ -238,14 +288,14 @@ export class OffboardingController {
         description: 'Update whether the employee has returned their access card',
     })
     @ApiParam({ name: 'id', description: 'Clearance checklist ID' })
-    @ApiBody({ type: UpdateCardReturnDto })
+    @ApiBody({ schema: { properties: { cardReturned: { type: 'boolean', example: true } } } })
     @ApiResponse({ status: 200, description: 'Card return status updated successfully' })
     @ApiResponse({ status: 404, description: 'Clearance checklist not found' })
     async updateCardReturn(
         @Param('id') id: string,
-        @Body() dto: UpdateCardReturnDto,
+        @Body('cardReturned') cardReturned: boolean,
     ) {
-        return this.offboardingService.updateCardReturn(id, dto);
+        return this.offboardingService.updateCardReturn(id, cardReturned);
     }
 
     // ============================================================

@@ -8,7 +8,16 @@ import { ClearanceChecklist, ClearanceChecklistDocument } from '../models/cleara
 import { Contract, ContractDocument } from '../models/contract.schema';
 
 // DTOs
-import {CreateTerminationRequestDto, CreateResignationRequestDto, UpdateTerminationStatusDto, CreateClearanceChecklistDto, UpdateClearanceItemDto, UpdateEquipmentItemDto, UpdateCardReturnDto, RevokeAccessDto, TriggerFinalSettlementDto,} from '../dto/offboarding';
+import {
+    CreateTerminationRequestDto,
+    CreateResignationRequestDto,
+    UpdateTerminationStatusDto,
+    CreateClearanceChecklistDto,
+    UpdateClearanceItemDto,
+    UpdateEquipmentItemDto,
+    RevokeAccessDto,
+    TriggerFinalSettlementDto,
+} from '../dto/offboarding';
 
 // Enums
 import { TerminationInitiation } from '../enums/termination-initiation.enum';
@@ -48,8 +57,7 @@ export class OffboardingService {
         // Check for existing active termination request
         const existingRequest = await this.terminationRequestModel.findOne({
             employeeId: new Types.ObjectId(dto.employeeId),
-            status: { $in: [TerminationStatus.PENDING, TerminationStatus.UNDER_REVIEW] }
-        }).exec();
+            status: { $in: [TerminationStatus.PENDING, TerminationStatus.UNDER_REVIEW] }}).exec();
 
         if (existingRequest) {
             throw new ConflictException('An active termination request already exists for this employee');
@@ -78,8 +86,13 @@ export class OffboardingService {
 
     /**
      * Get all termination requests with optional filtering
+     * Supports filtering by employeeId, status, and initiator
      */
-    async getAllTerminationRequests(employeeId?: string, status?: TerminationStatus): Promise<TerminationRequest[]> {
+    async getAllTerminationRequests(
+        employeeId?: string,
+        status?: TerminationStatus,
+        initiator?: TerminationInitiation
+    ): Promise<TerminationRequest[]> {
         const filter: any = {};
 
         if (employeeId) {
@@ -90,9 +103,53 @@ export class OffboardingService {
             filter.status = status;
         }
 
+        if (initiator) {
+            filter.initiator = initiator;
+        }
+
         return this.terminationRequestModel
             .find(filter)
-            .populate('employeeId')
+            .populate('contractId')
+            .sort({ createdAt: -1 })
+            .exec();
+    }
+
+    /**
+     * Get all termination/resignation requests by initiator
+     * Returns all requests (resignations if EMPLOYEE, terminations if HR/MANAGER)
+     */
+    async getTerminationRequestsByInitiator(
+        initiator: TerminationInitiation,
+        status?: TerminationStatus
+    ): Promise<TerminationRequest[]> {
+        const filter: any = { initiator };
+
+        if (status) {
+            filter.status = status;
+        }
+
+        return this.terminationRequestModel
+            .find(filter)
+            .populate('contractId')
+            .sort({ createdAt: -1 })
+            .exec();
+    }
+
+    /**
+     * Get all resignation requests (employee-initiated only)
+     * Convenience method for getting all resignations
+     */
+    async getAllResignationRequests(status?: TerminationStatus): Promise<TerminationRequest[]> {
+        return this.getTerminationRequestsByInitiator(TerminationInitiation.EMPLOYEE, status);
+    }
+
+    /**
+     * Get all termination requests by status
+     * Returns all terminations/resignations with the given status across all initiators
+     */
+    async getTerminationRequestsByStatus(status: TerminationStatus): Promise<TerminationRequest[]> {
+        return this.terminationRequestModel
+            .find({ status })
             .populate('contractId')
             .sort({ createdAt: -1 })
             .exec();
@@ -104,7 +161,6 @@ export class OffboardingService {
     async getTerminationRequestById(id: string): Promise<TerminationRequest> {
         const request = await this.terminationRequestModel
             .findById(id)
-            .populate('employeeId')
             .populate('contractId')
             .exec();
 
@@ -203,13 +259,7 @@ export class OffboardingService {
      * Allows employee to view their resignation request status
      */
     async getResignationRequestByEmployeeId(employeeId: string): Promise<TerminationRequest[]> {
-        return this.terminationRequestModel
-            .find({
-                employeeId: new Types.ObjectId(employeeId),
-                initiator: TerminationInitiation.EMPLOYEE
-            })
-            .sort({ createdAt: -1 })
-            .exec();
+        return this.terminationRequestModel.find({employeeId: new Types.ObjectId(employeeId), initiator: TerminationInitiation.EMPLOYEE}).sort({ createdAt: -1 }).exec();
     }
 
     // ============================================================
@@ -271,7 +321,7 @@ export class OffboardingService {
         });
 
         return checklist.save();
-    }
+    }// RAGE3 EL METHOD DEH
 
     /**
      * Get clearance checklist by termination ID
@@ -287,7 +337,7 @@ export class OffboardingService {
         }
 
         return checklist;
-    }
+    } // TAMAM
 
     /**
      * Get clearance checklist by ID
@@ -303,7 +353,7 @@ export class OffboardingService {
         }
 
         return checklist;
-    }
+    } // TAMAM
 
     // ============================================================
     // Requirement: Clearance, Handover & Access Revocation
@@ -340,7 +390,7 @@ export class OffboardingService {
             status: dto.status,
             comments: dto.comments || checklist.items[itemIndex].comments,
             updatedBy: new Types.ObjectId(dto.updatedBy),
-            updatedAt: new Date(),
+            updatedAt: dto.updatedAt ? new Date(dto.updatedAt) : new Date(),
         };
 
         const updated = await checklist.save();
@@ -408,14 +458,14 @@ export class OffboardingService {
     /**
      * Update access card return status
      */
-    async updateCardReturn(checklistId: string, dto: UpdateCardReturnDto): Promise<ClearanceChecklist> {
+    async updateCardReturn(checklistId: string, cardReturned: boolean): Promise<ClearanceChecklist> {
         const checklist = await this.clearanceChecklistModel.findById(checklistId).exec();
 
         if (!checklist) {
             throw new NotFoundException(`Clearance checklist with ID ${checklistId} not found`);
         }
 
-        checklist.cardReturned = dto.cardReturned;
+        checklist.cardReturned = cardReturned;
 
         return checklist.save();
     }
@@ -452,16 +502,8 @@ export class OffboardingService {
 
         const fullyCleared = allDepartmentsCleared && allEquipmentReturned && cardReturned;
 
-        return {
-            checklistId,
-            allDepartmentsCleared,
-            allEquipmentReturned,
-            cardReturned,
-            fullyCleared,
-            pendingDepartments,
-            pendingEquipment,
-        };
-    }
+        return {checklistId, allDepartmentsCleared, allEquipmentReturned, cardReturned, fullyCleared, pendingDepartments, pendingEquipment,};
+    }// HELW, MANTEQY
 
     // ============================================================
     // Requirement: Clearance, Handover & Access Revocation
@@ -618,10 +660,7 @@ export class OffboardingService {
         // Also delete associated clearance checklist if exists
         await this.clearanceChecklistModel.deleteOne({ terminationId: new Types.ObjectId(id) }).exec();
 
-        return {
-            message: 'Termination request deleted successfully',
-            deletedId: id,
-        };
+        return {message: 'Termination request deleted successfully', deletedId: id,};
     }
 }
 

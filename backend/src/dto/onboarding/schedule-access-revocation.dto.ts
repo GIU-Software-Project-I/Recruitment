@@ -17,3 +17,4 @@ export class ScheduleAccessRevocationDto {
     @IsOptional()
     notes?: string;
 }
+

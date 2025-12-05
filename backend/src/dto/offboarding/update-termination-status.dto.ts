@@ -12,3 +12,6 @@ export class UpdateTerminationStatusDto {
     @IsOptional()
     hrComments?: string;
 }
+
+
+// Maybe put comments from both hr and employee, termination reason here in update termination dto

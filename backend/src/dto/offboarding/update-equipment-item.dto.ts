@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateEquipmentItemDto {
     @ApiPropertyOptional({ description: 'Equipment ID', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsOptional()
     equipmentId?: string;
 

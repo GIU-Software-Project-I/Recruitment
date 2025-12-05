@@ -18,3 +18,4 @@ export class UploadDocumentDto {
     @IsNotEmpty()
     filePath: string;
 }
+

@@ -21,3 +21,4 @@ export class CreateOnboardingDto {
     @IsOptional()
     tasks?: CreateOnboardingTaskDto[];
 }
+

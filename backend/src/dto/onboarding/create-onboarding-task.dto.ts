@@ -27,3 +27,4 @@ export class CreateOnboardingTaskDto {
     @IsOptional()
     notes?: string;
 }
+

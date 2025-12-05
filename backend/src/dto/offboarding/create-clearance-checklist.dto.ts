@@ -1,4 +1,13 @@
-import { IsMongoId, IsNotEmpty, IsArray, IsOptional, ValidateNested, IsString, IsBoolean } from 'class-validator';
+import {
+    IsMongoId,
+    IsNotEmpty,
+    IsArray,
+    IsOptional,
+    ValidateNested,
+    IsString,
+    IsBoolean,
+    IsDateString
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -14,14 +23,19 @@ export class ClearanceItemDto {
     comments?: string;
 
     @ApiPropertyOptional({ description: 'User ID who updated this item', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsOptional()
     updatedBy?: string;
+
+    // @ApiPropertyOptional({ description: 'Update timestamp', example: '2025-12-15T10:30:00.000Z' })
+    // @IsDateString()
+    // @IsOptional()
+    // updatedAt?: string;
 }
 
 export class EquipmentItemDto {
     @ApiPropertyOptional({ description: 'Equipment ID', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsOptional()
     equipmentId?: string;
 
@@ -42,7 +56,7 @@ export class EquipmentItemDto {
 
 export class CreateClearanceChecklistDto {
     @ApiProperty({ description: 'Termination request ID', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsNotEmpty()
     terminationId: string;
 

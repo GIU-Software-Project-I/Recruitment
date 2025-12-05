@@ -28,3 +28,4 @@ export class ReserveEquipmentDto {
     @IsOptional()
     notes?: string;
 }
+

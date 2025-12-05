@@ -7,3 +7,4 @@ export class CancelOnboardingDto {
     @IsNotEmpty()
     reason: string;
 }
+

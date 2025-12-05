@@ -4,7 +4,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTerminationRequestDto {
     @ApiProperty({ description: 'Employee ID being terminated', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsNotEmpty()
     employeeId: string;
 
@@ -34,7 +34,7 @@ export class CreateTerminationRequestDto {
     terminationDate?: string;
 
     @ApiProperty({ description: 'Contract ID associated with the employee', example: '507f1f77bcf86cd799439011' })
-    @IsMongoId()
+    //@IsMongoId()
     @IsNotEmpty()
     contractId: string;
 }

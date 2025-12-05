@@ -4,23 +4,23 @@
 
 ### OFF-001: Create Termination Request (HR Manager)
 ### Initiates termination reviews based on warnings and performance data
-POST http://localhost:3000/offboarding/termination-requests
+POST http://localhost:4444/offboarding/termination-requests
 Content-Type: application/json
 
 {
-  "employeeId": "507f1f77bcf86cd799439011",
+  "employeeId": "693058221d883cb433e680fd",
   "initiator": "hr",
   "reason": "Performance issues after multiple warnings",
   "hrComments": "All procedures followed, warnings documented",
   "terminationDate": "2025-12-31T00:00:00.000Z",
-  "contractId": "507f1f77bcf86cd799439012"
+  "contractId": "693058211d883cb433e680f7"
 }
 
 ### Get All Termination Requests
-GET http://localhost:3000/offboarding/termination-requests
+GET http://localhost:4444/offboarding/termination-requests
 
 ### Get Termination Requests by Employee
-GET http://localhost:3000/offboarding/termination-requests?employeeId=507f1f77bcf86cd799439011
+GET http://localhost:4444/offboarding/termination-requests?employeeId=692d07a28ad1541a2ef62bb5
 
 ### Get Termination Requests by Status
 GET http://localhost:3000/offboarding/termination-requests?status=pending
@@ -28,13 +28,40 @@ GET http://localhost:3000/offboarding/termination-requests?status=pending
 ### Get Termination Request by ID
 GET http://localhost:3000/offboarding/termination-requests/507f1f77bcf86cd799439013
 
-### Update Termination Request Status (Workflow Approval)
+### Update Termination Request Status - Approve
 PATCH http://localhost:3000/offboarding/termination-requests/507f1f77bcf86cd799439013/status
 Content-Type: application/json
 
 {
   "status": "approved",
   "hrComments": "Approved by HR Director"
+}
+
+### Update Termination Request Status - Under Review
+PATCH http://localhost:3000/offboarding/termination-requests/507f1f77bcf86cd799439013/status
+Content-Type: application/json
+
+{
+  "status": "under_review",
+  "hrComments": "Forwarded to Legal for review"
+}
+
+### Update Termination Request Status - Reject Resignation (Insufficient Notice)
+PATCH http://localhost:3000/offboarding/termination-requests/507f1f77bcf86cd799439013/status
+Content-Type: application/json
+
+{
+  "status": "rejected",
+  "hrComments": "REJECTED - Insufficient notice period. Contract requires 30 days notice per clause 8.2. Employee provided only 14 days. Must extend resignation date to April 30, 2026 or arrange suitable replacement."
+}
+
+### Update Termination Request Status - Reject Termination (Insufficient Documentation)
+PATCH http://localhost:3000/offboarding/termination-requests/507f1f77bcf86cd799439014/status
+Content-Type: application/json
+
+{
+  "status": "rejected",
+  "hrComments": "REJECTED - Insufficient progressive discipline documentation. Manager must complete 90-day Performance Improvement Plan per policy HR-203. No documented warnings in past 12 months. Potential wrongful termination risk."
 }
 
 ### Delete Termination Request (Only if not approved)
@@ -142,7 +169,7 @@ Content-Type: application/json
 }
 
 ### Update Equipment Return Status
-PATCH http://localhost:3000/offboarding/clearance-checklists/507f1f77bcf86cd799439014/equipment/Laptop Dell XPS 15
+PATCH http://localhost:3000/offboarding/clearance-checklists/693058221d883cb433e68119/equipment/Laptop Dell XPS 15
 Content-Type: application/json
 
 {
@@ -162,7 +189,7 @@ Content-Type: application/json
 }
 
 ### Update Access Card Return
-PATCH http://localhost:3000/offboarding/clearance-checklists/507f1f77bcf86cd799439014/card-return
+PATCH http://localhost:3000/offboarding/clearance-checklists/6932357adc90fbe94d47b7ad/card-return
 Content-Type: application/json
 
 {

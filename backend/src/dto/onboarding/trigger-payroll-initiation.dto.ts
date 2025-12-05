@@ -12,3 +12,4 @@ export class TriggerPayrollInitiationDto {
     @IsOptional()
     notes?: string;
 }
+

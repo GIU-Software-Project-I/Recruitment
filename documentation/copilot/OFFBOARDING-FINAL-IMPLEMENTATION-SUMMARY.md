@@ -360,7 +360,7 @@ hrComments: "Reason for rejection..."
 ## Module Integration
 
 ### ✅ Recruitment Module Updated
-**File**: `src/module/Recruitment.module.ts`
+**File**: `src/module/recruitment.module.ts`
 
 ```typescript
 controllers: [

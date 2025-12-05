@@ -3,8 +3,21 @@
 ### All requirements implemented as per onboarding.requirements
 ### ============================================================
 
+### Candidate Upload Signed Contract & Forms - Initiate Onboarding
+POST http://localhost:4444/onboarding/upload-contract
+Content-Type: application/json
+
+{
+  "ownerId": "69304021613ea6ebb1f7617b",
+  "type": "contract",
+  "filePath": "/uploads/documents/signed-offer-letter-12345.pdf"
+}
+
+### ============================================================
 ### ONB-001: Create Onboarding Checklist (HR Manager)
-POST http://localhost:3000/onboarding
+### BR 8, 11: Customizable checklists with department-specific tasks
+### NOTE: Tasks MUST be provided - they can be customized per employee/department
+POST http://localhost:4444/onboarding
 Content-Type: application/json
 
 {
@@ -23,21 +36,62 @@ Content-Type: application/json
       "notes": "Government-issued ID"
     },
     {
+      "name": "Sign Employee Handbook",
+      "department": "HR",
+      "notes": "Acknowledge policies"
+    },
+    {
+      "name": "Complete Tax Forms (W-4)",
+      "department": "HR",
+      "notes": "For payroll setup"
+    },
+    {
+      "name": "Enroll in Benefits",
+      "department": "HR",
+      "deadline": "2026-01-12T00:00:00.000Z",
+      "notes": "Health insurance, 401k"
+    },
+    {
       "name": "IT System Access Setup",
       "department": "IT",
-      "deadline": "2026-01-10T00:00:00.000Z"
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Email, laptop, system access"
+    },
+    {
+      "name": "Security Training",
+      "department": "IT",
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Cybersecurity awareness"
+    },
+    {
+      "name": "Desk and Equipment Assignment",
+      "department": "Admin",
+      "deadline": "2026-01-08T00:00:00.000Z",
+      "notes": "Workspace ready"
+    },
+    {
+      "name": "ID Badge Issuance",
+      "department": "Admin",
+      "deadline": "2026-01-08T00:00:00.000Z",
+      "notes": "Building access"
+    },
+    {
+      "name": "Department Orientation",
+      "department": "Manager",
+      "deadline": "2026-01-10T00:00:00.000Z",
+      "notes": "Meet the team"
     }
   ]
 }
 
 ### Get All Onboarding Checklists
-GET http://localhost:3000/onboarding
+GET http://localhost:4444/onboarding
 
 ### Get Onboarding by ID
-GET http://localhost:3000/onboarding/507f1f77bcf86cd799439013
+GET http://localhost:4444/onboarding/69328e89111526edb467caf3
 
 ### Add Task to Onboarding Checklist
-POST http://localhost:3000/onboarding/507f1f77bcf86cd799439013/tasks
+POST http://localhost:4444/onboarding/69328e89111526edb467caf3
 Content-Type: application/json
 
 {
@@ -49,17 +103,17 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-002: Access Signed Contract Details (HR Manager)
-GET http://localhost:3000/onboarding/contracts/507f1f77bcf86cd799439012
+GET http://localhost:4444/onboarding/contracts/507f1f77bcf86cd799439012
 
 ### ============================================================
 ### ONB-004: View Onboarding Tracker (New Hire)
-GET http://localhost:3000/onboarding/employee/507f1f77bcf86cd799439011
+GET http://localhost:4444/onboarding/employee/507f1f77bcf86cd799439011
 
 ### Get Onboarding Progress
-GET http://localhost:3000/onboarding/507f1f77bcf86cd799439013/progress
+GET http://localhost:4444/onboarding/507f1f77bcf86cd799439013/progress
 
 ### Update Task Status
-PATCH http://localhost:3000/onboarding/507f1f77bcf86cd799439013/tasks/Complete I-9 Form/status
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/Complete I-9 Form/status
 Content-Type: application/json
 
 {
@@ -68,7 +122,7 @@ Content-Type: application/json
 }
 
 ### Update Task to In Progress
-PATCH http://localhost:3000/onboarding/507f1f77bcf86cd799439013/tasks/IT System Access Setup/status
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/IT System Access Setup/status
 Content-Type: application/json
 
 {
@@ -77,11 +131,11 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-005: Get Pending Tasks with Reminders (New Hire)
-GET http://localhost:3000/onboarding/employee/507f1f77bcf86cd799439011/pending-tasks
+GET http://localhost:4444/onboarding/employee/507f1f77bcf86cd799439011/pending-tasks
 
 ### ============================================================
 ### ONB-007: Upload Compliance Documents (New Hire)
-POST http://localhost:3000/onboarding/documents
+POST http://localhost:4444/onboarding/documents
 Content-Type: application/json
 
 {
@@ -91,7 +145,7 @@ Content-Type: application/json
 }
 
 ### Upload Certificate
-POST http://localhost:3000/onboarding/documents
+POST http://localhost:4444/onboarding/documents
 Content-Type: application/json
 
 {
@@ -101,10 +155,10 @@ Content-Type: application/json
 }
 
 ### Get Documents by Owner
-GET http://localhost:3000/onboarding/documents/owner/507f1f77bcf86cd799439011
+GET http://localhost:4444/onboarding/documents/owner/507f1f77bcf86cd799439011
 
 ### Link Document to Task
-PATCH http://localhost:3000/onboarding/507f1f77bcf86cd799439013/tasks/Upload ID Documents/document
+PATCH http://localhost:4444/onboarding/507f1f77bcf86cd799439013/tasks/Upload ID Documents/document
 Content-Type: application/json
 
 {
@@ -113,7 +167,7 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-009: Provision System Access (System Admin)
-POST http://localhost:3000/onboarding/provision-access
+POST http://localhost:4444/onboarding/provision-access
 Content-Type: application/json
 
 {
@@ -124,7 +178,7 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-012: Reserve Equipment and Resources (HR Employee)
-POST http://localhost:3000/onboarding/reserve-equipment
+POST http://localhost:4444/onboarding/reserve-equipment
 Content-Type: application/json
 
 {
@@ -137,7 +191,7 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-013: Schedule Access Revocation (HR Manager)
-POST http://localhost:3000/onboarding/schedule-access-revocation
+POST http://localhost:4444/onboarding/schedule-access-revocation
 Content-Type: application/json
 
 {
@@ -148,7 +202,7 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-018: Trigger Payroll Initiation (HR Manager)
-POST http://localhost:3000/onboarding/trigger-payroll-initiation
+POST http://localhost:4444/onboarding/trigger-payroll-initiation
 Content-Type: application/json
 
 {
@@ -158,11 +212,11 @@ Content-Type: application/json
 
 ### ============================================================
 ### ONB-019: Process Signing Bonus (HR Manager)
-POST http://localhost:3000/onboarding/contracts/507f1f77bcf86cd799439012/process-signing-bonus
+POST http://localhost:4444/onboarding/contracts/507f1f77bcf86cd799439012/process-signing-bonus
 
 ### ============================================================
 ### ONB-020: Cancel Onboarding - No Show (HR Manager)
-DELETE http://localhost:3000/onboarding/507f1f77bcf86cd799439013/cancel
+DELETE http://localhost:4444/onboarding/507f1f77bcf86cd799439013/cancel
 Content-Type: application/json
 
 {

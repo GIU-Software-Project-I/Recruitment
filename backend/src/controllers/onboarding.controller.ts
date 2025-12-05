@@ -9,6 +9,21 @@ export class OnboardingController {
     constructor(private readonly onboardingService: OnboardingService) {}
 
     // ============================================================
+    // Candidate Document Upload - Initiate Onboarding
+    // ============================================================
+
+    @Post('upload-contract')
+    @ApiOperation({
+        summary: 'Candidate upload signed contract and forms',
+        description: 'As a Candidate, I want to upload signed contract and candidate required forms and templates to initiate the onboarding process.',
+    })
+    @ApiBody({ type: UploadDocumentDto })
+    @ApiResponse({ status: 201, description: 'Contract and forms uploaded successfully' })
+    async uploadContractAndForms(@Body() dto: UploadDocumentDto) {
+        return this.onboardingService.uploadDocument(dto);
+    }
+
+    // ============================================================
     // ONB-001: Create Onboarding Task Checklists
     // ============================================================
 

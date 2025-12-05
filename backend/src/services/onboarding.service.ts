@@ -50,35 +50,22 @@ export class OnboardingService {
             throw new ConflictException('Onboarding checklist already exists for this employee');
         }
 
-        // Initialize default tasks if not provided
-        const defaultTasks = [
-            { name: 'Complete I-9 Form', department: 'HR', notes: 'Required by Day 1' },
-            { name: 'Upload ID Documents', department: 'HR', notes: 'Government-issued ID' },
-            { name: 'Sign Employee Handbook', department: 'HR', notes: 'Acknowledge policies' },
-            { name: 'Complete Tax Forms (W-4)', department: 'HR', notes: 'For payroll setup' },
-            { name: 'Enroll in Benefits', department: 'HR', notes: 'Health insurance, 401k' },
-            { name: 'IT System Access Setup', department: 'IT', notes: 'Email, laptop, access' },
-            { name: 'Security Training', department: 'IT', notes: 'Cybersecurity awareness' },
-            { name: 'Desk and Equipment Assignment', department: 'Admin', notes: 'Workspace ready' },
-            { name: 'ID Badge Issuance', department: 'Admin', notes: 'Building access' },
-            { name: 'Department Orientation', department: 'Manager', notes: 'Meet the team' },
-        ];
+        // BR 8, 11: Customizable checklists - tasks must be provided or use a template
+        // TODO: Load default tasks from onboarding template configuration based on department/role
+        if (!dto.tasks || dto.tasks.length === 0) {
+            throw new BadRequestException(
+                'Onboarding tasks must be provided. Alternatively, load from template configuration (TODO: implement template system)'
+            );
+        }
 
-        const tasks = dto.tasks && dto.tasks.length > 0
-            ? dto.tasks.map(task => ({
-                name: task.name,
-                department: task.department,
-                status: OnboardingTaskStatus.PENDING,
-                deadline: task.deadline ? new Date(task.deadline) : undefined,
-                documentId: task.documentId ? new Types.ObjectId(task.documentId) : undefined,
-                notes: task.notes || '',
-            }))
-            : defaultTasks.map(task => ({
-                name: task.name,
-                department: task.department,
-                status: OnboardingTaskStatus.PENDING,
-                notes: task.notes,
-            }));
+        const tasks = dto.tasks.map(task => ({
+            name: task.name,
+            department: task.department,
+            status: OnboardingTaskStatus.PENDING,
+            deadline: task.deadline ? new Date(task.deadline) : undefined,
+            documentId: task.documentId ? new Types.ObjectId(task.documentId) : undefined,
+            notes: task.notes || '',
+        }));
 
         const onboarding = new this.onboardingModel({
             employeeId: new Types.ObjectId(dto.employeeId),
@@ -153,7 +140,6 @@ export class OnboardingService {
     async getAllOnboardings(): Promise<Onboarding[]> {
         return this.onboardingModel
             .find()
-            .populate('employeeId')
             .populate('contractId')
             .sort({ createdAt: -1 })
             .exec();
@@ -165,7 +151,6 @@ export class OnboardingService {
     async getOnboardingById(id: string): Promise<Onboarding> {
         const onboarding = await this.onboardingModel
             .findById(id)
-            .populate('employeeId')
             .populate('contractId')
             .populate('tasks.documentId')
             .exec();
@@ -272,11 +257,7 @@ export class OnboardingService {
         // TODO: Send reminders for pending tasks
         // TODO: Send urgent notifications for overdue tasks
 
-        return {
-            employeeId,
-            pendingTasks,
-            overdueTasks,
-        };
+        return {employeeId, pendingTasks, overdueTasks,};
     }
 
     // ============================================================
@@ -320,11 +301,7 @@ export class OnboardingService {
     /**
      * Link document to onboarding task
      */
-    async linkDocumentToTask(
-        onboardingId: string,
-        taskName: string,
-        documentId: string,
-    ): Promise<Onboarding> {
+    async linkDocumentToTask(onboardingId: string, taskName: string, documentId: string,): Promise<Onboarding> {
         const onboarding = await this.onboardingModel.findById(onboardingId).exec();
 
         if (!onboarding) {
@@ -352,12 +329,7 @@ export class OnboardingService {
      *
      * BR 9(b): Auto onboarding tasks for IT (email, laptop, system access)
      */
-    async provisionSystemAccess(dto: ProvisionAccessDto): Promise<{
-        success: boolean;
-        employeeId: string;
-        message: string;
-        provisionedAt: Date;
-    }> {
+    async provisionSystemAccess(dto: ProvisionAccessDto): Promise<{ success: boolean; employeeId: string; message: string; provisionedAt: Date; }> {
         // TODO: Validate employee exists in Employee Profile module
 
         // TODO: Integration with IT/Access Systems
@@ -370,11 +342,7 @@ export class OnboardingService {
         // TODO: Send notification to IT department
         // TODO: Send notification to employee with access details
 
-        return {
-            success: true,
-            employeeId: dto.employeeId,
-            message: 'System access provisioned successfully. Email, SSO, and internal systems enabled.',
-            provisionedAt: new Date(),
+        return {success: true, employeeId: dto.employeeId, message: 'System access provisioned successfully. Email, SSO, and internal systems enabled.', provisionedAt: new Date(),
         };
     }
 
@@ -388,16 +356,7 @@ export class OnboardingService {
      *
      * BR 9(c): Auto onboarding tasks for Admin (workspace, ID badge)
      */
-    async reserveEquipment(dto: ReserveEquipmentDto): Promise<{
-        success: boolean;
-        employeeId: string;
-        reservedItems: {
-            equipment?: string[];
-            deskNumber?: string;
-            accessCardNumber?: string;
-        };
-        message: string;
-    }> {
+    async reserveEquipment(dto: ReserveEquipmentDto): Promise<{ success: boolean; employeeId: string; reservedItems: { equipment?: string[];deskNumber?: string; accessCardNumber?: string; }; message: string; }> {
         // TODO: Validate employee exists
 
         // TODO: Integration with Facilities/Admin Systems
@@ -408,11 +367,8 @@ export class OnboardingService {
         // TODO: Send notification to Facilities/Admin
         // TODO: Update onboarding task status for equipment reservation
 
-        return {
-            success: true,
-            employeeId: dto.employeeId,
-            reservedItems: {
-                equipment: dto.equipment,
+        return {success: true, employeeId: dto.employeeId, reservedItems: {
+            equipment: dto.equipment,
                 deskNumber: dto.deskNumber,
                 accessCardNumber: dto.accessCardNumber,
             },
